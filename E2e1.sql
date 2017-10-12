@@ -1,6 +1,8 @@
 DROP SCHEMA IF EXISTS cinema CASCADE;
 CREATE SCHEMA cinema;
 SET SEARCH_PATH TO cinema;
+
+--CREAZIONE TABELLE
 CREATE TABLE persona(
 	id_persona integer PRIMARY KEY, 
 	nome varchar(20) NOT NULL, 
@@ -30,13 +32,19 @@ CREATE TABLE proiezione(
 	giorno timestamp, 
 	PRIMARY KEY (id_cinema, id_film, giorno));
 
+--POPOLAMENTO
+--manuale
 INSERT INTO cinema(id_cinema, nome, indirizzo) VALUES (02, 'S. Angelo', 'Via Lucida 6 Perugia');
 INSERT INTO cinema(id_cinema, nome, indirizzo) VALUES (01, 'Zenith', 'Via Bonfigli 11 Perugia');
 INSERT INTO cinema(id_cinema, nome, indirizzo) VALUES (03, 'Multisala Clarici', 'Corso Cavour 84 Foligno');
 INSERT INTO cinema(id_cinema, nome, indirizzo) VALUES (04, 'Multiplex Giometti', 'Strada Centova Perugia');
-
+--da file
 \copy persona FROM persona.txt 
 \copy film FROM film.txt 
 \copy partecipazione FROM partecipazione.txt 
 \copy proiezione FROM proiezione.txt
 
+--AGGIUSTAMENTI (scambio nomi colonne)
+ALTER TABLE persona RENAME COLUMN cognome to temp;
+ALTER TABLE persona RENAME COLUMN nome to cognome;
+ALTER TABLE persona RENAME COLUMN temp to nome;
