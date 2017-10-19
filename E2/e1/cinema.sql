@@ -29,7 +29,7 @@ CREATE TABLE cinema(
 CREATE TABLE proiezione(
 	id_cinema integer REFERENCES cinema(id_cinema) ON DELETE CASCADE, 
 	id_film integer REFERENCES film(id_film) ON DELETE CASCADE, 
-	giorno timestamp, 
+	giorno date, 
 	PRIMARY KEY (id_cinema, id_film, giorno));
 
 --POPOLAMENTO
