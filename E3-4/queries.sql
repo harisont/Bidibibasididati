@@ -50,4 +50,5 @@ SELECT DISTINCT nome, cognome FROM persona, partecipazione, film WHERE id_person
 SELECT DISTINCT nome, cognome FROM persona, partecipazione, proiezione WHERE id_persona=id_attore AND partecipazione.id_film=proiezione.id_film AND giorno>='2002-1-1';
 
 --Quali sono i titoli dei film con Nicole Kidman che non sono stati proiettati al cinema "Le Fontanelle"?
-SELECT DISTINCT film.titolo FROM film, persona, proiezione, partecipazione, cinema WHERE partecipazione.id_film=proiezione.id_film AND persona.id_persona=partecipazione.id_attore AND cinema.id_cinema=proiezione.id_cinema AND film.id_film=proiezione.id_film AND film.id_film=partecipazione.id_film AND cinema.nome!='Le Fontanelle';
+SELECT DISTINCT film.titolo FROM film, persona, proiezione, partecipazione, cinema WHERE partecipazione.id_film=proiezione.id_film AND persona.id_persona=partecipazione.id_attore AND cinema.id_cinema=proiezione.id_cinema AND film.id_film=proiezione.id_film AND film.id_film=partecipazione.id_film EXCEPT SELECT titolo FROM cinema, proiezione, partecipazione where cinema.nome='Le Fontanelle' AND proiezione.id_film=partecipazione.id_film AND cinema.id_cinema=proiezione.id_cinema;
+
