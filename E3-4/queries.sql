@@ -49,6 +49,11 @@ SELECT DISTINCT nome, cognome FROM persona, partecipazione, film WHERE id_person
  --Quali attori hanno preso parte a film proiettati al cinema 'Zenith' dopo il 2000?
 SELECT DISTINCT nome, cognome FROM persona, partecipazione, proiezione WHERE id_persona=id_attore AND partecipazione.id_film=proiezione.id_film AND giorno>='2002-1-1';
 
---Quali sono i titoli dei film con Nicole Kidman che non sono stati proiettati al cinema "Le Fontanelle"?
-SELECT DISTINCT film.titolo FROM film, persona, proiezione, partecipazione, cinema WHERE partecipazione.id_film=proiezione.id_film AND persona.id_persona=partecipazione.id_attore AND cinema.id_cinema=proiezione.id_cinema AND film.id_film=proiezione.id_film AND film.id_film=partecipazione.id_film EXCEPT SELECT titolo FROM cinema, proiezione, partecipazione where cinema.nome='Le Fontanelle' AND proiezione.id_film=partecipazione.id_film AND cinema.id_cinema=proiezione.id_cinema;
+--Quali sono i titoli dei film con Nicole Kidman che non sono stati proiettati al cinema "Le Fontanelle"
+SELECT DISTINCT titolo FROM film, persona, partecipazione WHERE film.id_film=partecipazione.id_film AND persona.id_persona=partecipazione.id_attore AND persona.nome='Nicole' AND persona.cognome='Kidman' EXCEPT SELECT DISTINCT titolo FROM film, cinema, proiezione WHERE film.id_film=proiezione.id_film AND proiezione.id_cinema=cinema.id_cinema AND cinema.nome='Le Fontanelle';
 
+--Quali cognomi contengono la lettera 's'?
+SELECT DISTINCT cognome FROM persona WHERE cognome LIKE '%s%';
+
+--Quali titoli contengono almeno tre 'e'
+SELECT DISTINCT titolo FROM film WHERE titolo LIKE '%e%e%e%';
