@@ -11,3 +11,4 @@ SELECT id_attore FROM partecipazione AS ia WHERE NOT EXISTS (SELECT * FROM cinem
 SELECT nome, cognome, COUNT(film.id_film) AS n_film FROM film JOIN persona ON film.id_regista=persona.id_persona WHERE genere IN (SELECT genere FROM film JOIN persona ON id_persona=id_regista WHERE nome='David' AND cognome='Cronenberg') GROUP BY nome, cognome;
 
 --Attori che hanno interpretato film di Lars von Trier
+SELECT DISTINCT id_attore FROM partecipazione WHERE id_attore IN (SELECT id_attore FROM partecipazione NATURAL JOIN film JOIN persona ON persona.id_persona=film.id_regista WHERE persona.nome='Lars' AND persona.cognome='von Trier');
