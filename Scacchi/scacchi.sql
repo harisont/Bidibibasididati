@@ -6,13 +6,13 @@ SET SEARCH_PATH TO scacchi;
 
 CREATE TABLE giocatore(
    nome varchar(10) primary key,    --è un nickname, pertanto è unico
-   nazionalità varchar(25)
+   nazionalita varchar(50)
 );
 
 CREATE TABLE apertura(
    eco varchar(3) primary key,   --manca check formato stringa
-   nome varchar(15) NOT NULL,
-   variante varchar(15) UNIQUE   --l'univocità qui non ha senso, ma era richiesta
+   nome varchar(50) NOT NULL,
+   variante varchar(50) UNIQUE   --l'univocità qui non ha senso, ma era richiesta
 );
 
 CREATE TABLE partita(
@@ -22,7 +22,12 @@ CREATE TABLE partita(
    anno integer CHECK (anno>=0),
    round integer CHECK (round>0),
    eco varchar(3) REFERENCES apertura(eco),
-   risultato varchar(3) CHECK (risultato LIKE '[0-1]-[0-1]' OR '1/2'),
+   risultato varchar(3) CHECK (risultato ~ '[01]-[01]' OR risultato='1/2'),
    num_mosse integer CHECK (num_mosse>2),
    PRIMARY KEY(bianco, nero, luogo, anno, round)
 );
+
+--POPOLAMENTO DA FILE
+\copy giocatore FROM giocatore.txt
+\copy apertura FROM apertura.txt
+\copy partita FROM partita.txt
