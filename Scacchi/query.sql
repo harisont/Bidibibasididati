@@ -15,3 +15,6 @@ SELECT nome FROM apertura JOIN partita ON apertura.eco=partita.eco WHERE num_mos
 
 --Nazionalità dei giocatori che hanno vinto almeno una partita col bianco (valori NULL?)
 SELECT nazionalita FROM giocatore WHERE nome IN (SELECT bianco FROM partita WHERE risultato='1-0');
+
+--Nomi dei giocatori che, con il nero, hanno vinto tutte le partite
+SELECT DISTINCT nome FROM giocatore WHERE NOT EXISTS (SELECT * FROM partita WHERE nome=nero AND (risultato!='0-1' OR risultato IS null)) AND nome IN (SELECT nero FROM partita);
