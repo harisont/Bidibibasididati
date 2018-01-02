@@ -13,7 +13,7 @@ CREATE TABLE stadio (
 CREATE TABLE squadra (
    nazione varchar(30) PRIMARY KEY,
    confederazione varchar(30),
-   data_qualifica date,
+   data_qualifica date CHECK (data_qualifica<'31/12/09'),
    sponsor varchar(40)
 );
 CREATE TABLE partita (
@@ -25,4 +25,104 @@ CREATE TABLE partita (
    goal2 integer CHECK (goal2>=0),
    spettatori integer CHECK (spettatori>=0),
    PRIMARY KEY(stadio, data)
+);
+
+--POPOLAMENTO
+INSERT INTO stadio VALUES (
+   'Stadio Giovanborgo',
+   'Johannesburg',
+   10000);
+INSERT INTO stadio VALUES (
+   'Stadio La Citta Del Capo ha un pss nella rrr',
+   'Citta del Capo',
+   500000
+);
+INSERT INTO stadio VALUES (
+   'Stadio dei Pirati',
+   'Port Elizabeth',
+   500000
+);
+INSERT INTO squadra VALUES (
+   'Sudafrica',
+   'CAF',
+   NULL,
+   'Colussi'
+);
+INSERT INTO squadra VALUES (
+   'Messico',
+   'UEFA',
+   NULL,
+   'Nuvole SPA'
+);
+INSERT INTO squadra VALUES (
+   'Uruguay',
+   'UEFA',
+   '09/09/09',
+   NULL
+);
+INSERT INTO squadra VALUES (
+   'Francia',
+   'CAF',
+   NULL,
+   'Mirka'
+);
+INSERT INTO squadra VALUES (
+   'Argentina',
+   'UEFA',
+   NULL,
+   'Asia'
+);
+INSERT INTO squadra VALUES (
+   'Nigeria',
+   NULL,
+   NULL,
+   NULL
+);
+INSERT INTO squadra VALUES (
+   'Corea del Sud',
+   NULL,
+   NULL,
+   'Di certo non la Corea del Nord'
+);
+INSERT INTO squadra VALUES (
+   'Grecia',
+   'CAF',
+   '11/11/09',
+   'Eschilo (che qui si Sofocle)'
+);
+INSERT INTO partita VALUES (
+   'Stadio Giovanborgo',
+   '11/06/10',
+   'Sudafrica',
+   'Messico',
+   0,
+   3,
+   10000
+);
+INSERT INTO partita VALUES (
+   'Stadio La Citta Del Capo ha un pss nella rrr',
+   '11/06/10',
+   'Uruguay',
+   'Francia',
+   1,
+   2,
+   NULL
+);
+INSERT INTO partita VALUES (
+   'Stadio Giovanborgo',
+   '12/06/10',
+   'Argentina',
+   'Nigeria',
+   0,
+   2,
+   1000
+);
+INSERT INTO partita VALUES (
+   'Stadio dei Pirati',
+   '12/06/10',
+   'Corea del Sud',
+   'Grecia',
+   0,
+   1,
+   NULL
 );
