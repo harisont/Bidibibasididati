@@ -126,3 +126,7 @@ INSERT INTO partita VALUES (
    1,
    NULL
 );
+
+--QUERY
+SELECT DISTINCT nome FROM stadio JOIN partita ON nome=stadio JOIN squadra ON nazione=squadra1 OR nazione=squadra2 WHERE squadra.confederazione='CAF';
+SELECT COUNT(*) FROM partita JOIN stadio ON nome=stadio WHERE citta='Johannesburg' AND goal1=goal2 GROUP BY (stadio, data);
