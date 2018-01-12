@@ -1,0 +1,4 @@
+1	Bompiani	Empoli
+2	Feltrinelli	Milano
+3	Adelphi	Delfi
+4	Pearson	Perugia

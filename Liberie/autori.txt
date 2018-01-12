@@ -1,0 +1,7 @@
+1	Morante	Elsa
+2	Levi	Primo
+3	Alighieri	Dante
+4	Ferrante	Elena
+5	Leopardi	Giacomo
+6	Tanenbaum	O.
+7	Wetherall	G.

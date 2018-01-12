@@ -1,0 +1,4 @@
+1	La libreria	Milano
+2	Feltrinelli	Perugia
+3	Feltrinelli	Catania
+4	Libraccio	\N

@@ -1,0 +1,7 @@
+1	Il sistema periodico	Autobiografico	1	10.15
+2	Divina Commedia	Fantasy	2	20.00
+3	L'isola di Arturo	Narrativa	3	14.12
+4	Operette morali	Filosofia	4	20.33
+5	La tregua	Autobiografico	1	14.00
+6	L'amica geniale	Narrativa	2	\N
+7	Computer's networks	Didattica	3	35.00
