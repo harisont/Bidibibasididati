@@ -18,7 +18,7 @@ CREATE TABLE libri (
 	codice int PRIMARY KEY,
 	titolo varchar(50),
 	genere varchar(20),
-	editore integer REFERENCES editori(codice)
+	editore int REFERENCES editori(codice)
 		ON DELETE RESTRICT ON UPDATE RESTRICT,
 	prezzo numeric(5, 2)	--i libri costano, ma fino a un certo punto
 );
@@ -43,6 +43,11 @@ CREATE TABLE scorte (
 	copie int CHECK (copie>=0 AND copie IS NOT NULL),
 	PRIMARY KEY(libro, libreria)
 );
+--Sostituisce l'esercizio 3 per poter fare l'esercizio 5
+CREATE TABLE libri_gialli (
+	codice int PRIMARY KEY REFERENCES libri(codice),
+	editore int REFERENCES editori(codice)
+);
 
 \copy autori from autori.txt
 \copy editori from editori.txt
@@ -60,3 +65,16 @@ SELECT DISTINCT copie, titolo, cognome FROM libri JOIN scorte ON libri.codice=sc
 SELECT DISTINCT autore FROM ha_scritto WHERE autore NOT IN (SELECT autore FROM ha_scritto JOIN libri ON ha_scritto.libro=libri.codice WHERE genere='Fantasy');
 SELECT libri.titolo, editori.codice FROM libri JOIN editori ON libri.editore=editori.codice WHERE libri.prezzo>(SELECT MAX(prezzo) FROM libri WHERE genere='Fantasy' GROUP BY codice);
 SELECT libro, libreria FROM scorte WHERE copie=0;
+
+--Trigger aggiornamento automatico libri_gialli
+CREATE FUNCTION aggiornaGialli() RETURNS trigger AS $BODY$
+	BEGIN
+		IF NEW.genere='Giallo' THEN
+			INSERT INTO libri_gialli VALUES (NEW.codice, NEW.editore);
+		END IF;
+		RETURN NULL;
+	END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER aggiallo AFTER INSERT OR UPDATE ON libri FOR EACH ROW EXECUTE PROCEDURE aggiornaGialli();
