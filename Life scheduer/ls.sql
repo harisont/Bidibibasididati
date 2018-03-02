@@ -1,4 +1,3 @@
---Cancellazioni a cascata
 DROP SCHEMA IF EXISTS lifescheduler CASCADE;
 CREATE SCHEMA lifescheduler;
 SET search_path TO lifescheduler;
@@ -11,3 +10,6 @@ CREATE TABLE activities (
 );
 
 \copy activities from activities.txt
+
+--sample query
+SELECT name, duration FROM activities WHERE duration <=30 AND (category='chores' OR category='study') order by duration DESC, priority ASC;

@@ -20,5 +20,5 @@ climbing	120	1	sport
 make bed	5	1	chores
 emails	10	1	chores
 laundry	20	1	chores
+Random Acoustic Melodies	\N	2	leisure
 group studying	\N	1	study
-RAM		\N	2	leisure
