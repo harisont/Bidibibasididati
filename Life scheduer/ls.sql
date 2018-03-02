@@ -2,13 +2,18 @@ DROP SCHEMA IF EXISTS lifescheduler CASCADE;
 CREATE SCHEMA lifescheduler;
 SET search_path TO lifescheduler;
 
-CREATE TABLE activities (
-	name varchar(100) PRIMARY KEY,
-	duration int,  --or new type int+strings
-	priority int,  --check 1-3
-  category varchar(50)  --check
+CREATE TABLE categories (
+  name varchar(50) PRIMARY KEY
 );
 
+CREATE TABLE activities (
+	name varchar(100) PRIMARY KEY,
+	duration int,
+	priority int CHECK (priority>0 AND priority<=3),
+  category varchar(50) REFERENCES categories
+);
+
+\copy categories from categories.txt
 \copy activities from activities.txt
 
 --sample query

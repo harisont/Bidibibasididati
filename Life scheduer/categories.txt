@@ -1,0 +1,5 @@
+sport
+chores
+study
+leisure
+self-care
