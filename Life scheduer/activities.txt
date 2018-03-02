@@ -1,0 +1,24 @@
+tidy bedroom	15	1	chores
+read	15	3	leisure
+plan day	15	2	chores
+IELTS listening	30	2	study
+IELTS writing 1	20	1	study
+play flute	30	3	leisure
+plan week	30	2	chores
+pack lunch	30	2	chores
+call C.	30	2	leisure
+shampoo	30	2	self-care
+python	30	3	study
+IELTS writing 2	40	2	study
+study session	60	1	study
+skype C.	45	2	leisure
+IELTS reading	60	2	study
+IELTS full writing	60	1	study
+running	60	3	sport
+skating	60	3	sport
+climbing	120	1	sport
+make bed	5	1	chores
+emails	10	1	chores
+laundry	20	1	chores
+group studying	\N	1	study
+RAM		\N	2	leisure
