@@ -17,4 +17,4 @@ CREATE TABLE activities (
 \copy activities from activities.txt
 
 --sample query
-SELECT name, duration FROM activities WHERE duration <=30 AND (category='chores' OR category='study') order by duration DESC, priority ASC;
+--SELECT name AS activity, duration FROM activities WHERE duration <=30 AND (category='chores' OR category='study') order by duration DESC, priority ASC;

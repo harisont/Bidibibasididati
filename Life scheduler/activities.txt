@@ -10,7 +10,7 @@ call C.	30	2	leisure
 shampoo	30	2	self-care
 python	30	3	study
 IELTS writing 2	40	2	study
-study session	60	1	study
+uni study session	60	1	study
 skype C.	45	2	leisure
 IELTS reading	60	2	study
 IELTS full writing	60	1	study
@@ -22,3 +22,4 @@ emails	10	1	chores
 laundry	20	1	chores
 Random Acoustic Melodies	\N	2	leisure
 group studying	\N	1	study
+news reading	10	2	self-care
