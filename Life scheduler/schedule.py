@@ -12,14 +12,16 @@ try:
     if (len(args)==1):  #no parameters
         cur.execute(basicQuery)
     elif (len(args)==2):
+        par=(str(args[1]), )
         try:
             arg1 = int(args[1])
         except ValueError:
-            cur.execute(basicQuery+'WHERE category=\''+str(args[1])+'\'')
+            cur.execute(basicQuery+'WHERE category=%s', par)
         else:
-            cur.execute(basicQuery+'WHERE duration<='+str(arg1))
+            cur.execute(basicQuery+'WHERE duration<=%s', par)
     elif (len(args)==3):
-        cur.execute(basicQuery+'WHERE category=\''+str(args[1])+'\' AND duration='+args[2])
+        pars=(str(args[1]), str(args[2]))
+        cur.execute(basicQuery+'WHERE duration=%s AND category=%s', pars)
     else:
         print('Usage: schedule mins category')
     print("Rows: ", cur.rowcount)
@@ -34,5 +36,3 @@ finally:
     if conn is not None:
         conn.close()
         print('Database connection closed.')
-
-    #SELECT name AS activity, duration FROM activities WHERE duration <=30 AND (category='chores' OR category='study') order by duration DESC, priority ASC;
