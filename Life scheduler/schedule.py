@@ -1,5 +1,6 @@
 import psycopg2
 import sys
+from termcolor import cprint
 
 args=sys.argv   #schedule timeslice category->categories (or)
 
@@ -8,7 +9,7 @@ try:
     # print('Database connection established.')
     cur = conn.cursor()
     cur.execute('SET search_path TO lifescheduler')
-    queryStart='SELECT name AS activity, duration FROM activities '
+    queryStart='SELECT name AS activity, duration, priority FROM activities '
     queryEnd='ORDER BY duration DESC, priority ASC '
     if (len(args)==1):  #no parameters
         cur.execute(queryStart+queryEnd)
@@ -26,7 +27,13 @@ try:
     else:
         print('Usage: schedule mins category')
     for record in cur:
-        print(record)
+        if(record[2]==1):
+            priority='red'
+        elif(record[2]==2):
+            priority='yellow'
+        elif(record[2]==3):
+            priority='green'
+        cprint(record[0:2], priority)
     cur.close()
 except (Exception, psycopg2.DatabaseError) as error:
     print(error)
