@@ -26,6 +26,7 @@ try:
         cur.execute(queryStart+'WHERE duration<=%s AND category=%s '+queryEnd, pars)
     else:
         print('Usage: schedule mins category')
+    print('ACTIVITY (duration)')
     for record in cur:
         if(record[2]==1):
             priority='red'
@@ -33,7 +34,7 @@ try:
             priority='yellow'
         elif(record[2]==3):
             priority='green'
-        cprint(record[0:2], priority)
+        cprint(str(record[0])+' ('+str(record[1])+')', priority)
     cur.close()
 except (Exception, psycopg2.DatabaseError) as error:
     print(error)
