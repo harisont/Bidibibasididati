@@ -28,14 +28,20 @@ try:
         cur.execute(queryStart+'WHERE duration<=%s AND category=%s '+queryEnd, pars)
     else:
         print('Usage: schedule mins category')
-    for record in cur:
-        if(record[2]==1):
-            priority='red'
-        elif(record[2]==2):
-            priority='yellow'
-        elif(record[2]==3):
-            priority='green'
-        cprint(str(record[0])+' ('+str(record[1])+' min)', priority)
+    if (cur.rowcount==0):
+        print('Nothing to do.')
+    else:
+        for record in cur:
+            if (record[2]==1):
+                priority='red'
+            elif (record[2]==2):
+                priority='yellow'
+            elif (record[2]==3):
+                priority='green'
+            if (record[1]!=None):   # I miss ternary operator
+                cprint(str(record[0])+' ('+str(record[1])+' mins)', priority)
+            else:
+                cprint(str(record[0]), priority)
     cur.close()
 except (Exception, psycopg2.DatabaseError) as error:
     print(error)
