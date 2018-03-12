@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import psycopg2
 import sys
 from termcolor import cprint
@@ -10,7 +12,7 @@ try:
     cur = conn.cursor()
     cur.execute('SET search_path TO lifescheduler')
     queryStart='SELECT name AS activity, duration, priority FROM activities '
-    queryEnd='ORDER BY duration DESC, priority ASC '
+    queryEnd='ORDER BY duration DESC, priority ASC;'
     if (len(args)==1):  #no parameters
         cur.execute(queryStart+queryEnd)
     elif (len(args)==2):
@@ -26,7 +28,6 @@ try:
         cur.execute(queryStart+'WHERE duration<=%s AND category=%s '+queryEnd, pars)
     else:
         print('Usage: schedule mins category')
-    print('ACTIVITY (duration)')
     for record in cur:
         if(record[2]==1):
             priority='red'
@@ -34,7 +35,7 @@ try:
             priority='yellow'
         elif(record[2]==3):
             priority='green'
-        cprint(str(record[0])+' ('+str(record[1])+')', priority)
+        cprint(str(record[0])+' ('+str(record[1])+' min)', priority)
     cur.close()
 except (Exception, psycopg2.DatabaseError) as error:
     print(error)
