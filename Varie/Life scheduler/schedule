@@ -31,6 +31,7 @@ try:
     if (cur.rowcount==0):
         print('Nothing to do.')
     else:
+        print('\nTo-do:')
         for record in cur:
             if (record[2]==1):
                 priority='red'
@@ -38,10 +39,11 @@ try:
                 priority='yellow'
             elif (record[2]==3):
                 priority='green'
-            if (record[1]!=None):   # I miss ternary operator
+            if (record[1]!=None):   # does the ternary operator even exist in python?
                 cprint(str(record[0])+' ('+str(record[1])+' mins)', priority)
             else:
                 cprint(str(record[0]), priority)
+        print('\n')
     cur.close()
 except (Exception, psycopg2.DatabaseError) as error:
     print(error)

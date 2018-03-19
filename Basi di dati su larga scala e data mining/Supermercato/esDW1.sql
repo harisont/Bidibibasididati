@@ -226,4 +226,3 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 
 --QUERY
 --incassi mensili [e settimanali] per ogni prodotto, suddivisi ulteriormente in base alle possibili promozioni
-SELECT prodottoid, promoid, mese, SUM(prezzouscontato) FROM fatti NATURAL JOIN tempo GROUP BY rollup(prodottoid, promoid, mese);
