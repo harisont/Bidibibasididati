@@ -604,3 +604,4 @@ SELECT hotelid, SUM(libere) AS libere, SUM(occupate) AS occupate, SUM(nd) AS non
 --Per ogni mese nel 2012, selezionare il numero totale di camere non disponibili. Associare la funzione RANK() ad ogni mese rispetto a tale numero (posizione 1 per il numero più alto):
 SELECT mese, SUM(nd) AS non_disponibili, rank() OVER(ORDER BY SUM(nd) DESC) FROM fatti2 NATURAL JOIN tempo WHERE anno=2012 GROUP BY mese;
 --Per ogni hotel, calcolare il ricavato totale giornaliero e medio rispetto agli ultimi tre giorni:
+SELECT hotelid, data, sum(prezzo), AVG(sum(prezzo)) over (PARTITION BY hotelid ORDER BY data rows 3 preceding) FROM fatti GROUP BY hotelid, data;
