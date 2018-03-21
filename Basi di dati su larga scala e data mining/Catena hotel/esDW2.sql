@@ -595,4 +595,12 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 --
 
 --QUERY
---Selezionare i ricavi mensili del 2012 per ogni tipologia di camera, il ricavo totale per ogni tipologia (indipendentemente dal mese) e il totale mensile dei ricavi (indip. dalla tipologia)
+--Selezionare i ricavi mensili del 2012 per ogni tipologia di camera, il ricavo totale per ogni tipologia (indipendentemente dal mese) e il totale mensile dei ricavi (indip. dalla tipologia):
+SELECT mese, tipologiaid, SUM(prezzo) FROM fatti NATURAL JOIN tempo NATURAL JOIN camera NATURAL JOIN stato_camere WHERE anno=2012 AND stato='OCC' GROUP BY CUBE(mese, tipologiaid);
+--Selezionare i ricavi mensili del 2012 per ogni hotel, tipologia di camera e giorno della settimana in modo tale da completare il cubo corrispondente a queste tre dimensioni e tutti i suoi possibili cuboidi:
+SELECT mese, hotelid, tipologiaid, gsett, SUM(prezzo) FROM fatti NATURAL JOIN tempo NATURAL JOIN camera NATURAL JOIN stato_camere WHERE anno=2012 AND stato='OCC' GROUP BY CUBE(mese, hotelid, tipologiaid, gsett);
+--Selezionare il numero di camere libere, occupate e non disponibili per ogni hotel. Associare la funzione RANK() ad ogni albergo rispetto al rapporto camere occupate/camere totali (posizione 1 per il rapporto più alto):
+SELECT hotelid, SUM(libere) AS libere, SUM(occupate) AS occupate, SUM(nd) AS non_disponibili, rank() OVER (ORDER BY SUM(occupate)/(SUM(libere)+SUM(occupate)+SUM(nd)) DESC) FROM fatti2 GROUP BY hotelid;
+--Per ogni mese nel 2012, selezionare il numero totale di camere non disponibili. Associare la funzione RANK() ad ogni mese rispetto a tale numero (posizione 1 per il numero più alto):
+SELECT mese, SUM(nd) AS non_disponibili, rank() OVER(ORDER BY SUM(nd) DESC) FROM fatti2 NATURAL JOIN tempo WHERE anno=2012 GROUP BY mese;
+--Per ogni hotel, calcolare il ricavato totale giornaliero e medio rispetto agli ultimi tre giorni:
