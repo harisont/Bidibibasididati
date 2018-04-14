@@ -24,7 +24,7 @@ Data mining tasks are divided into two general categories:
   - __anomaly detection__.
 
 
-# I. Data
+# Data
 The type and the quality of the data are important for successful data mining. Also, raw data often have to be preprocessed so that thay better fit a specific data mining technique. 
 Data quality issues that often need to be addressed include both the presence of noice and outliers and missing, inconsistent, duplicate, biased or otherwise unrepresentative data.
 A __data set__ is a collection of _data objects_ or _records_ described by a number of _attributes_. An __attribute__ is a property of a data object that may vary from one sample to another and from one time to another, associated to numerical or symbolic values by a a _measurement scale_.
@@ -52,4 +52,32 @@ We can also describe attributes in terms number of values they can take, so that
 - __continuous__ attributes, whose values are real numbers.
 
 
-## Types of data sets
+## Data sets
+The main characteristics of a data set are the following:
+
+- __Dimensionality__: number of attributes of the data objects. High-dimensional data are extremely difficult to analyze, so that the preprocessing step frequently involves _dimensionality reduction_;
+- __Sparsity__, which leads to significant savings in computation time and storage; 
+- __Resolution__: it is important that the level of resolution is not too fine nor coarse, as patterns may vary depending on it.
+
+### Types of data sets
+It is convenient to distinguish three groups of data set types: __record data__, __graph-based data__ and __Ordered data__.
+
+#### Record data
+Much data mining work assumes that the data set consists in a collection of data objects, each of which has a fixed set of attributes. This kind of data is called _record data_ and is usually stored in flat files or relational databases. In the latter case, anyway, the database just serves as a convenient place to find records, as data mining often doesn't make use of all the additional information the database structure provides. 
+As the fact relational databases are often used to store record data suggests, we can imagine the corresponding kind of data sets as _m_ by _n_ matrices (__data matrices__), where there is one row for each object and one column for each attribute, or vice versa. Data matrices are an interesting variation of record data, because with this representation standard matrix operations can be applied to manipulate the data. 
+A special type of record data is __transaction data__, where each record or transaction involves a _set_ of items. A good example of a data object in a record data set are the products in a person's "market basket": that's why such collections of sets of items are also called __market basket data__.
+
+#### Graph-based data
+There are two kinds of graph based data:
+
+- data sets where the graph captures relationships among different data objects;
+- data sets where the data objects themselves are represented as graphs. This is convenient when such objects are structured, i.e. they contain subobjects that have significant relationships.
+
+#### Ordered data
+For some types of data, the attributes have relationships that involve temporal or spatial order:
+
+- Sequential or __temporal data__: record data where each record has a timestamp associated with it. A special kind of temporal data is __time series data__, where each record consists of a series of measurements taken over time;
+- __Sequence data__: same as temporal data, with positions in an ordered sequence instead of timestamps;
+- __Spatial data__, distributed on a two or three dimensional grid.
+
+# Data quality
