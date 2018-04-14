@@ -27,9 +27,10 @@ Data mining tasks are divided into two general categories:
 # I. Data
 The type and the quality of the data are important for successful data mining. Also, raw data often have to be preprocessed so that thay better fit a specific data mining technique. 
 Data quality issues that often need to be addressed include both the presence of noice and outliers and missing, inconsistent, duplicate, biased or otherwise unrepresentative data.
+A __data set__ is a collection of _data objects_ or _records_ described by a number of _attributes_. An __attribute__ is a property of a data object that may vary from one sample to another and from one time to another, associated to numerical or symbolic values by a a _measurement scale_.
 
 ## Types of data
-A __data set__ is a collection of _data objects_ or _records_ described by a number of _attributes_. An __attribute__ is a property of a data object that may vary from one sample to another and from one time to another, associated to numerical or symbolic values by a a _measurement scale_. As the values used to represent an attribute may have properties that are not the properties of the attribute itself (and vice versa), many different types of measurement scale (aka types of attributes) exist. Of course, the digital representation of an attribute is intrinsically numerical, so a good way to specify the type of an attribute is to identify the properties of numbers that correspond to to underlying properties of the attribute. Some of those are:
+ As the values used to represent an attribute may have properties that are not the properties of the attribute itself (and vice versa), many different types of measurement scale (aka types of attributes) exist. Of course, the digital representation of an attribute is intrinsically numerical, so a good way to specify the type of an attribute is to identify the properties of numbers that correspond to to underlying properties of the attribute. Some of those are:
 
 1. distinctness,
 2. order,
@@ -49,3 +50,6 @@ We can also describe attributes in terms number of values they can take, so that
 
 - __discrete__ attributes, that have a finite or countably finite set of possible values;
 - __continuous__ attributes, whose values are real numbers.
+
+
+## Types of data sets
