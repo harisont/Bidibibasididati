@@ -60,7 +60,7 @@ The main characteristics of a data set are the following:
 - __Resolution__: it is important that the level of resolution is not too fine nor coarse, as patterns may vary depending on it.
 
 ### Types of data sets
-It is convenient to distinguish three groups of data set types: __record data__, __graph-based data__ and __Ordered data__.
+It is convenient to distinguish three groups of data set types: __record data__, __graph-based data__ and __ordered data__.
 
 #### Record data
 Much data mining work assumes that the data set consists in a collection of data objects, each of which has a fixed set of attributes. This kind of data is called _record data_ and is usually stored in flat files or relational databases. In the latter case, anyway, the database just serves as a convenient place to find records, as data mining often doesn't make use of all the additional information the database structure provides. 
@@ -70,8 +70,8 @@ A special type of record data is __transaction data__, where each record or tran
 #### Graph-based data
 There are two kinds of graph based data:
 
-- data sets where the graph captures relationships among different data objects;
-- data sets where the data objects themselves are represented as graphs. This is convenient when such objects are structured, i.e. they contain subobjects that have significant relationships.
+- Data sets where the graph captures relationships among different data objects;
+- Data sets where the data objects themselves are represented as graphs. This is convenient when such objects are structured, i.e. they contain subobjects that have significant relationships.
 
 #### Ordered data
 For some types of data, the attributes have relationships that involve temporal or spatial order:
