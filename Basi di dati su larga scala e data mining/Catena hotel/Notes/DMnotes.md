@@ -141,6 +141,20 @@ The term refers to a function that maps the entire set of values of a given attr
 - __simple functions__ (a simple mathematical function is applied to each value individually); 
 - __normalization__ (aka __standardization__), where the goal is to make an entire set of values satisfy a particular property.
 
-#### Simple functions
 
-#### Normalization
+## Proximity measures
+Informally, __similarity__ can be defined as a numerical measure of the degree to which two data objects are alike They are often defined or transformed to fall in the interval [0, 1]. Likewise, __dissimilarity__ measures the degree to which the two objects are different. The term _proximity_ refers to a similarity or dissimilarity.
+The proximity of objects with _n_ attributes is typically defined by combining the proximities of individual attributes, thus we first discuss proximity between objects having a single attribute (see table).
+
+| Attribute type | Dissimilarity (d) | Similarity (s) |
+|:---:|:---:|:---:|
+| Nominal | 0 if x = y, 1 otherwise | 1 if x = y, 0 otherwise | 
+| Ordinal | abs(x - y)/(n - 1) | 1 - d |
+| Interval/ratio | (abs(x - y)) | -d (...) |
+
+### Distances
+
+A dissimilarity with certain properties is said to be a distance.
+
+#### Euclidean distance
+![euclidean distance](eucld.png "Euclidean distance")
