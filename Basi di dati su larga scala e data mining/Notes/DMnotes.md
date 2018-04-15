@@ -164,14 +164,14 @@ A _distance_ or _metric_ _d_ between two objects _x_ and _y_ is a dissimilarity 
 #### Euclidean distance
 The Euclidean distance between two objects _p_ and _q_, y is given by the following formula:
 
-![Euclidean distance formula](eucld.png "Euclidean distance")
+![](eucld.png "Euclidean distance")
 
 where _n_ is the number of dimensions.
 
 #### Minkowski distance
 The Minkowski distance, a generalization of the Euclidean distance between two objects _x_ and _y_, is defined as follows:
 
-![Minkowski distance formula](minkd.png "Minkowski distance")
+![](minkd.png "Minkowski distance")
 
 where _n_ is still the number of dimensions and _p_ is a parameter.
 
@@ -191,23 +191,20 @@ where M<sub>XY</sub> = | attributes where _x_ was x and _y_ was y |.
 #### Cosine similarity
 Some documents are often represented as vectors, where each attribute represents the number of occurrences of a particular term in the text. The normalizations used for documents preserve sparsity. Thus, an appropriate similarity measure, just like the Jaccard coefficient, should not depend on the number of shared 0 values, as two completely different documents are likely to "not contain" many of the same words, but also must be able to handle non-binary vectors. The cosine similarity, defined next, is one of the most common proximity measures with these characteristics:
 
-![Cosine similarity formula](coss.png "Cosine similarity")
+![](coss.png "Cosine similarity")
 
 where the numerator is the dot product between the two vectors.
 
 #### Tanimoto coefficient (extended Jaccard)
 Generalization of Jaccard coefficient for non-binary vectors:
 
-![Tanimoto coefficient formula](tanc.png "Tanimoto coefficient")
+![](tanc.png "Tanimoto coefficient")
 
 #### Correlation
 Correlation measures the linear relationship between objects. To compute correlation, we standardize the data objects _x_ and _y_ and take their dot product.
 
-![correlation visual intuition](corrv.png "Visually evaluating correlation")
+![](corrv.png "Visually evaluating correlation")
 
 ### Combining similarities for heterogeneous attributes
 All previous definitions of similarities assume all attributes are of the same type. Thus, a general approach is needed.
 The straightforward one is to compute similarities between each attribute separately and then combine them. It is possible to use weights when some attributes are more important than others to the definition of general proximity.
-
-
-
