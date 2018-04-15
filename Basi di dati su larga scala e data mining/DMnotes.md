@@ -1,5 +1,8 @@
-% Notes from _Introduction to data mining_ (Tan, Steinbach, Kumar)
+% Data mining notes
 % Arianna Masciolini
+Sources:
+
+- _Introduction to data mining_ (Tan, Steinbach, Kumar)
 
 # Introduction
 
@@ -26,7 +29,6 @@ Data mining tasks are divided into two general categories:
 
 # Data
 The type and the quality of the data are important for successful data mining. Also, raw data often have to be preprocessed so that thay better fit a specific data mining technique. 
-Data quality issues that often need to be addressed include both the presence of noice and outliers and missing, inconsistent, duplicate, biased or otherwise unrepresentative data.
 A __data set__ is a collection of _data objects_ or _records_ described by a number of _attributes_. An __attribute__ is a property of a data object that may vary from one sample to another and from one time to another, associated to numerical or symbolic values by a a _measurement scale_.
 
 ## Types of data
@@ -55,7 +57,7 @@ We can also describe attributes in terms number of values they can take, so that
 ## Data sets
 The main characteristics of a data set are the following:
 
-- __Dimensionality__: number of attributes of the data objects. High-dimensional data are extremely difficult to analyze, so that the preprocessing step frequently involves _dimensionality reduction_;
+- __Dimensionality__: number of attributes of the data objects;
 - __Sparsity__, which leads to significant savings in computation time and storage; 
 - __Resolution__: it is important that the level of resolution is not too fine nor coarse, as patterns may vary depending on it.
 
@@ -80,4 +82,65 @@ For some types of data, the attributes have relationships that involve temporal 
 - __Sequence data__: same as temporal data, with positions in an ordered sequence instead of timestamps;
 - __Spatial data__, distributed on a two or three dimensional grid.
 
-# Data quality
+
+## Data quality
+Data mining usually can't rely on optimal data sets, as data was often collected for other purpose, so it focuses on the detection and correction of data quality problems (__data cleaning__) and on the use of __algorithms that can tolerate poor data quality__-.
+Data quality issues that often need to be addressed include both the presence of noise and outliers and missing, inconsistent, duplicate, biased or otherwise unrepresentative data.
+
+## Data preprocessing
+This section will cover the most important data preprocessing approaches and the interrelationships among them.
+
+### Aggregation
+Aggregating data means combining multiple records (or attributes) into a single data object (or attribute). 
+Even though a disadvantage of aggregation is the potential loss of interesting details, there are a few motivations for aggregation:
+
+- aggregation means data reduction: small data sets require less memory and processing time, so that more expensive data mining algorithms can be applied;
+- aggregation can act as a change of scale, providing a higher-level view of the data;
+- the behavior of groups of objects is often more stable than that of individual the individual ones.
+
+### Sampling
+Sampling is a commonly used approach for selecting a subset of the data objects to be analyzed. It's useful both for statisticians, when _obtaining_ the entire data set is too expensive, and data miners, when the existing data set is too large to be entirely _processed_.
+The key point is that using a representative sample, i.e. a sample that has approximately the same properties of interest as the original data set, instead of the entire data set will work almost equally well. 
+The essential approaches to sampling are the following:
+
+- __simple random sampling__: equal probability of selecting any particular item. It can be done with or without replacement (in the former case, objects are not removed from the population as they're selected for the sample, thus the probability of choosing any object _remains_ constant);
+- __stratified sampling__: this comes in handy when the population consists of different types of objects, each with a widely different number of objects, because in this case simple random sampling can fail to adequately represent the less frequent types objects. With the most basic stratified sampling technique, equal numbers of objects are drawn from each group, while in another variation the number of objects drawn from each group is proportional to the size of the group itself.
+
+Determining the proper sample size is sometimes difficult, so _progressive_ (aka _adaptive_) schemes are used in such cases. They start with a small sample and increase its size until a it is large enough.
+
+### Dimensionality reduction
+High-dimensional data are extremely difficult to analyze, so that the preprocessing step frequently involves dimensionality reduction. Its main purpose is to avoid the so-called "curse of dimensionality": when dimensionality increases, data become increasingly sparse, occupying way too much space. The most common techniques for dimensionality reduction, based on linear algebra, are:
+
+- __PCA__ (Principal Components Analysis), that finds new attributes, called _principal components_ that:
+  - are linear combinations of the original ones,
+  - are orthogonal to each other,
+  - capture the maximum amount of variation in the data; 
+- __SVD__ (Singular Values Decomposition);
+- __ISOMAP__.
+
+### Feature subset selection
+Another way to reduce dimensionality is to simply remove redundant or irrelevant features. The brute-force approach, i.e. trying all possible subsets of features as input to the chosen data mining algorithm an then take the subset that produces the best results, is impractical in most situations, so that three standard approaches have been developed:
+
+- __embedded__: feature selection occurs naturally as part of the data mining algorithm;
+- __filter__: features are selected before the data mining algorithm is run, using an approach that is independent of the data mining task;
+- __wrapper__: the target data mining algorithm is used as a black box to select the significant features, without enumerating all possible subsets.
+
+### Feature creation
+Feature creation consists in the creation of a new set of attributes that captures the important information in a more efficient way than the original one. Next, three methodologies for feature creation are described:
+
+- __feature extraction__, highly domain-specific;
+- __mapping data to a new space__;
+- __feature construction__.
+
+
+### Discretization and binarization
+Discretization and binarization are used when the chosen data mining algorithm requires data in the form of categorical attributes.
+
+### Attribute transformation
+The term refers to a function that maps the entire set of values of a given attribute to a new set of replacement values. Two important types of such transformations are:
+- __simple functions__ (a simple mathematical function is applied to each value individually); 
+- __normalization__ (aka __standardization__), where the goal is to make an entire set of values satisfy a particular property.
+
+#### Simple functions
+
+#### Normalization
