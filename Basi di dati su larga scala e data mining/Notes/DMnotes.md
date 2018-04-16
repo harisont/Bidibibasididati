@@ -228,4 +228,6 @@ This chapter presents a methodology known as _association analysis_, useful for 
 Any subset of all items in a market basket data is said to be an itemset. Each transaction consists of an itemset.
 An itemset containing _k_ objects is called a _k_-itemset.
 
-### Support count $\sigma$
+### Support count $-b \pm \sqrt{b^2 - 4ac} \over 2a$
+$-b \pm \sqrt{b^2 - 4ac} \over 2a$
+
