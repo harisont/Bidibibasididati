@@ -164,14 +164,14 @@ A _distance_ or _metric_ _d_ between two objects _x_ and _y_ is a dissimilarity 
 #### Euclidean distance
 The Euclidean distance between two objects _p_ and _q_, y is given by the following formula:
 
-![](eucld.png "Euclidean distance")
+![](formulas/eucld.png "Euclidean distance")
 
 where _n_ is the number of dimensions.
 
 #### Minkowski distance
 The Minkowski distance, a generalization of the Euclidean distance between two objects _x_ and _y_, is defined as follows:
 
-![](minkd.png "Minkowski distance")
+![](formulas/minkd.png "Minkowski distance")
 
 where _n_ is still the number of dimensions and _p_ is a parameter.
 
@@ -191,19 +191,19 @@ where M<sub>XY</sub> = | attributes where _x_ was x and _y_ was y |.
 #### Cosine similarity
 Some documents are often represented as vectors, where each attribute represents the number of occurrences of a particular term in the text. The normalizations used for documents preserve sparsity. Thus, an appropriate similarity measure, just like the Jaccard coefficient, should not depend on the number of shared 0 values, as two completely different documents are likely to "not contain" many of the same words, but also must be able to handle non-binary vectors. The cosine similarity, defined next, is one of the most common proximity measures with these characteristics:
 
-![](coss.png "Cosine similarity")
+![](formulas/coss.png "Cosine similarity")
 
 where the numerator is the dot product between the two vectors.
 
 #### Tanimoto coefficient (extended Jaccard)
 Generalization of Jaccard coefficient for non-binary vectors:
 
-![](tanc.png "Tanimoto coefficient")
+![](formulas/tanc.png "Tanimoto coefficient")
 
 #### Correlation
 Correlation measures the linear relationship between objects. To compute correlation, we standardize the data objects _x_ and _y_ and take their dot product.
 
-![](corrv.png "Visually evaluating correlation")
+![](images/corrv.png "Visually evaluating correlation")
 
 ### Combining similarities for heterogeneous attributes
 All previous definitions of similarities assume all attributes are of the same type. Thus, a general approach is needed.
@@ -220,7 +220,7 @@ The straightforward one is to compute similarities between each attribute separa
 | 5 | {Bread, Milk, Diapers, Cola} |
 
 The above table is a classic example of the previously mentioned __market basket transactions__.
-This chapter presents a methodology known as _association analysis_, useful for discovering interesting relationships in this kind of data sets. Such relationships can be represented in the form of __association rules__ or __frequent itemsets__ that will predict the occurrence of an item based on the occurrences of other items in the transaction, such as {Diapers} -> {Beer} (NB: __-> means co-occurrence, not causality!__).
+This chapter presents a methodology known as _association analysis_, useful for discovering interesting relationships in this kind of data sets. Such relationships can be represented in the form of __association rules__ or __frequent itemsets__ that will predict the occurrence of an item based on the occurrences of other items in the transaction.
 
 ## Basic definitions
 
@@ -228,6 +228,58 @@ This chapter presents a methodology known as _association analysis_, useful for 
 Any subset of all items in a market basket data is said to be an itemset. Each transaction consists of an itemset.
 An itemset containing _k_ objects is called a _k_-itemset.
 
-### Support count $-b \pm \sqrt{b^2 - 4ac} \over 2a$
-$-b \pm \sqrt{b^2 - 4ac} \over 2a$
+### Support count
+Frequency of occurrence of an itemset.
+
+### Frequent itemset
+Itemset whose support is greater than or equal to a _minsup_ threshold.
+
+ ### Association rule
+ Implication rule of the form X -> Y, where X and Y are itemsets, such as {Diapers} -> {Beer} (NB: __-> means co-occurrence, not causality!__).
+
+### Rule evaluation metrics
+#### Support
+Fraction of transactions that contain an itemset X (typically composed by both the left and right hand sides of an association rule):
+
+![](formulas/supp.png "Support formula")
+
+where T is the set containing all transactions. Support is important because a rule with high confidence but very low support may have occurred simply by chance.
+
+#### Confidence
+Measure of how often items in Y appear in transactions that contain X, i.e. measure of the reliability of the inference made by a rule:
+
+![](formulas/conf.png "Confidence formula")
+
+## Association rule mining
+The goal of association rule mining is to find all the rules having support >= _minsup_ and confidence >= _minconf_, where _minsup_ and _minconf_ are the corresponding support and confidence thresholds.
+The brute-force approach is to compute support and confidence for every possible rule, but as there are exponentially many rules that can be extracted from a data set, this is prohibitively expensive.
+An initial step towards improving performances is to decouple the support and confidence requirements. This results in a two-step approach:
+
+1. __frequent itemset generation__ (_frequent_ means that support >= _minsup_);
+2. high confidence __rule generation__ from each frequent itemset, where each rule is a bipartition of a frequent itemset.
+
+Still, the straightforward approach to step 1, i.e. computing support for each possible itemset, is too expensive, because the total number of itemsets is M = 2<sup>k</sup>-1, where _k_ is the number of unique items (excluding the null set).
+There are in fact three strategies to improve frequent itemset generation performances:
+
+1. using pruning techniques to reduce the number of candidates __M__;
+2. reduce the number of transactions __N__;
+3. reduce the number of comparisons __NM__ using efficient data structures.
+
+The following sections aim to give a more detailed explanation of the three approaches we just mentioned. To make things easier to understand, a lattice structure can be used to enumerate the list of all possible itemsets. Here's an example:
+![](images/latt0.png "Itemset lattice")
+
+### Approach 1: reducing M
+An effective way to reduce frequent itemset candidates is based on the __apriori principle__, i.e.: _if an itemset is frequent, then all of its subset are also frequent_. Conversely, if an itemset is infrequent, all of its supersets are also infrequent, so that, as shown in the following picture, as soon as an itemset is found to be infrequent, the entire subgraph containing its superset can be pruned. 
+
+![](images/latt1.png "Approach 1 lattice")
+
+This __support-based pruning__ strategy is made possible by a key property of support, namely, that the support for an itemset never exceeds the support for its subset (__anti-monotone property__).
+
+ #### Apriori algorithm
+ 
+
+### Approach 2: reducing N
+
+
+### Approach 3: reducing MN
 
