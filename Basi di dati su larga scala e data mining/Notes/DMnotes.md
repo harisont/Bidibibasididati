@@ -209,3 +209,23 @@ Correlation measures the linear relationship between objects. To compute correla
 All previous definitions of similarities assume all attributes are of the same type. Thus, a general approach is needed.
 The straightforward one is to compute similarities between each attribute separately and then combine them. It is possible to use weights when some attributes are more important than others to the definition of general proximity.
 
+# Association analysis
+
+| id | items |
+|:---:|:---:|
+| 1 | {Bread, Milk} |
+| 2 | {Bread, Diapers, Beer, Eggs} |
+| 3 | {Milk, Diapers, Beer, Cola} |
+| 4 | {Bread, Milk, Diapers, Beer} |
+| 5 | {Bread, Milk, Diapers, Cola} |
+
+The above table is a classic example of the previously mentioned __market basket transactions__.
+This chapter presents a methodology known as _association analysis_, useful for discovering interesting relationships in this kind of data sets. Such relationships can be represented in the form of __association rules__ or __frequent itemsets__ that will predict the occurrence of an item based on the occurrences of other items in the transaction, such as {Diapers} -> {Beer} (NB: __-> means co-occurrence, not causality!__).
+
+## Basic definitions
+
+### Itemset 
+Any subset of all items in a market basket data is said to be an itemset. Each transaction consists of an itemset.
+An itemset containing _k_ objects is called a _k_-itemset.
+
+### Support count $\sigma$
