@@ -2,7 +2,7 @@
 % Arianna Masciolini
 Sources:
 
-- _Introduction to data mining_ (Tan, Steinbach, Kumar)
+- _Introduction to data mining_ (Tan, Steinbach, Kumar): introduction and chapters I, IV, VI
 
 # Introduction
 
@@ -18,8 +18,8 @@ This process consists of three main steps:
 
 ### Data mining tasks
 Data mining tasks are divided into two general categories:
-- Predictive tasks, such as __predictive modeling__, that is building a model for a target variable as a function of explanatory variables. Predictive modeling is called _classification_ when it deals with discrete targets, _regression_ when the targets are continuous;
 
+- Predictive tasks, such as __predictive modeling__, that is building a model for a target variable as a function of explanatory variables. Predictive modeling is called _classification_ when it deals with discrete targets, _regression_ when the targets are continuous;
 - descriptive tasks, such as:
   
   - __association analysis__, which consists in discovering strongly associated features in the data,
@@ -45,10 +45,10 @@ Given these properties of numbers, we can define four types of attributes, divid
 |:---:|:---:|:---:|:---:|:---:|
 | categorical/qualitative | __nominal__ | 1 | any one-to one mapping | id numbers |
 | categorical/qualitative | __ordinal__ | 1,2 | an order-preserving change of values | grades |
-| numeric/quantitative | __interval__ | 1, 2, 3 | _newvalue = a*oldvalue + b_, where _a_ and _b_ are constants | temperatures |
-| numeric/quantitative | __ratio__ | 1, 2, 3, 4 | _newvalue = a*oldvalue_ (change of unit) | time, lengths |
+| numeric/quantitative | __interval__ | 1, 2, 3 | newvalue = a*oldvalue + b, where _a_ and _b_ are constants | temperatures |
+| numeric/quantitative | __ratio__ | 1, 2, 3, 4 | newvalue = a*oldvalue (change of unit) | time, lengths |
 
-We can also describe attributes in terms number of values they can take, so that we divide the into:
+We can also describe attributes in terms of the number of values they can take, so that we divide them into:
 
 - __discrete__ attributes, that have a finite or countably finite set of possible values;
 - __continuous__ attributes, whose values are real numbers.
@@ -208,3 +208,4 @@ Correlation measures the linear relationship between objects. To compute correla
 ### Combining similarities for heterogeneous attributes
 All previous definitions of similarities assume all attributes are of the same type. Thus, a general approach is needed.
 The straightforward one is to compute similarities between each attribute separately and then combine them. It is possible to use weights when some attributes are more important than others to the definition of general proximity.
+
