@@ -276,7 +276,16 @@ An effective way to reduce frequent itemset candidates is based on the __apriori
 This __support-based pruning__ strategy is made possible by a key property of support, namely, that the support for an itemset never exceeds the support for its subset (__anti-monotone property__).
 
 #### Apriori algorithm
- 
+```
+k = 1
+generate frequent itemsets of length k
+repeat
+  generate lenght k+1 candidate itemsets from length k frequent itemsets
+  prune candidate itemsets containing infrequent subsets of length k
+  count support for each candidate
+  eliminate infrequent candidates
+until no new frequent itemsets are identified
+```
 
 ### Approach 2: reducing N
 
