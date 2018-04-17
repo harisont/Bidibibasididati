@@ -36,8 +36,8 @@ As the values used to represent an attribute may have properties that are not th
 
 1. distinctness,
 2. order,
-3. addition (+ and -),
-4. multiplication (* and /).
+3. addition ($+$ and $-$),
+4. multiplication ($\times$ and $\div$).
 
 Given these properties of numbers, we can define four types of attributes, divided in two categories, that can also be described in terms of _permissible transformations_, i.e. transformations that don't change the meaning of the attribute itself: 
 
@@ -45,8 +45,8 @@ Given these properties of numbers, we can define four types of attributes, divid
 |:---:|:---:|:---:|:---:|:---:|
 | categorical/qualitative | __nominal__ | 1 | any one-to one mapping | id numbers |
 | categorical/qualitative | __ordinal__ | 1,2 | an order-preserving change of values | grades |
-| numeric/quantitative | __interval__ | 1, 2, 3 | newvalue = a*oldvalue + b, where _a_ and _b_ are constants | temperatures |
-| numeric/quantitative | __ratio__ | 1, 2, 3, 4 | newvalue = a*oldvalue (change of unit) | time, lengths |
+| numeric/quantitative | __interval__ | 1, 2, 3 | $newvalue = a \times oldvalue + b$, where $a$ and $b$ are constants | temperatures |
+| numeric/quantitative | __ratio__ | 1, 2, 3, 4 | $newvalue = a \times oldvalue$ (change of unit) | time, lengths |
 
 We can also describe attributes in terms of the number of values they can take, so that we divide them into:
 
@@ -143,37 +143,37 @@ The term refers to a function that maps the entire set of values of a given attr
 
 
 ## Proximity measures
-Informally, __similarity__ can be defined as a numerical measure of the degree to which two data objects are alike They are often defined or transformed to fall in the interval [0, 1]. Likewise, __dissimilarity__ measures the degree to which the two objects are different. The term _proximity_ refers to a similarity or dissimilarity.
-The proximity of objects with _n_ attributes is typically defined by combining the proximities of individual attributes, thus we first discuss proximity between objects having a single attribute (see table).
+Informally, __similarity__ can be defined as a numerical measure of the degree to which two data objects are alike They are often defined or transformed to fall in the interval $[0, 1]$. Likewise, __dissimilarity__ measures the degree to which the two objects are different. The term _proximity_ refers to a similarity or dissimilarity.
+The proximity of objects with $n$ attributes is typically defined by combining the proximities of individual attributes, thus we first discuss proximity between objects having a single attribute (see table).
 
 | Attribute type | Dissimilarity (d) | Similarity (s) |
 |:---:|:---:|:---:|
-| Nominal | 0 if x = y, 1 otherwise | 1 if x = y, 0 otherwise | 
-| Ordinal | abs(x - y)/(n - 1) | 1 - d |
-| Interval/ratio | (abs(x - y)) | -d (...) |
+| Nominal | $0$ if $x = y$, $1$ if $x \neq y$ | $1$ if $x = y$, $0$ if $x \neq y$ | 
+| Ordinal | $\frac{abs(x - y)}{(n - 1)}$ | $1 - d$ |
+| Interval/ratio | $abs(x - y)$ | $-d$ |
 
 ### Distances
 A _distance_ or _metric_ _d_ between two objects _x_ and _y_ is a dissimilarity that satisfies the following properties:
 
-- d(x, y) >= 0 for all x, y and d(x, y) = 0 only if x = y (__positivity__);
-- d(x, y) = d(y, x) for all x, y (__symmetry__);
-- d(x, z) <= d(x, y) + d(y, z) for all x, y, z (__triangle inequality__).
+- $d(x, y) \geq 0 \forall x, y \wedge  d(x, y) = 0 \rightarrow  x = y$ (__positivity__);
+- $d(x, y) = d(y, x) \forall x, y$ (__symmetry__);
+- $d(x, z) \geq d(x, y) + d(y, z) \forall x, y, z$ (__triangle inequality__).
 
 (NB: positivity and symmetry typically hold for similarities, too.)
 
 #### Euclidean distance
-The Euclidean distance between two objects _p_ and _q_, y is given by the following formula:
+The Euclidean distance is given by the following formula:
 
-![](formulas/eucld.png "Euclidean distance")
+$$\sqrt{\sum_{i=1}^{n}(y_{i}-x_{i})^n}$$
 
-where _n_ is the number of dimensions.
+where $n$ is the number of dimensions.
 
 #### Minkowski distance
-The Minkowski distance, a generalization of the Euclidean distance between two objects _x_ and _y_, is defined as follows:
+The Minkowski distance, a generalization of the Euclidean distance, is defined as follows:
 
-![](formulas/minkd.png "Minkowski distance")
+$$(\sum_{i=1}^{n}|x_{i}-y_{i}|^p)^{1/p}$$
 
-where _n_ is still the number of dimensions and _p_ is a parameter.
+where $n$ is still the number of dimensions and $p$ is a parameter.
 
 #### Mahalanobis distance
 Descriptive statistics provides a relative measure of a some data points distance from a common point, which is unitless and scale-invariant, and takes into account the correlations of the data set: the Mahalanobis distance.
@@ -181,24 +181,24 @@ Descriptive statistics provides a relative measure of a some data points distanc
 ### Other examples of proximity measures
 
 #### Similarity measures between binary vectors
-If _x_, _y_ only have binary attributes, there are two common proximity measures to choose from:
+If $x$, $y$ only have binary attributes, there are two common proximity measures to choose from:
 
-- __SMC__ (Simple Matching Coefficient) = (M<sub>11</sub> + M<sub>00</sub>) / (M<sub>00</sub> + M<sub>01</sub> + M<sub>10</sub> + M<sub>11</sub>);
-- __J__ (Jaccard coefficient) = M<sub>11</sub> / (M<sub>01</sub> + M<sub>10</sub> + M<sub>11</sub>)
+- Simple Matching Coefficient $SMC = \frac{(M_{11} + M_{00})}{(M_{00} + M_{01} + M_{10} + M_{11})}$;
+- Jaccard coefficient  $J = \frac{M_{11}}{(M_{01} + M_{10} + M_{11})}$
 
-where M<sub>XY</sub> = | attributes where _x_ was x and _y_ was y |.
+where $M_{XY}$ = number of attributes where $X$ was x and $Y$ was y |.
 
 #### Cosine similarity
 Some documents are often represented as vectors, where each attribute represents the number of occurrences of a particular term in the text. The normalizations used for documents preserve sparsity. Thus, an appropriate similarity measure, just like the Jaccard coefficient, should not depend on the number of shared 0 values, as two completely different documents are likely to "not contain" many of the same words, but also must be able to handle non-binary vectors. The cosine similarity, defined next, is one of the most common proximity measures with these characteristics:
 
-![](formulas/coss.png "Cosine similarity")
+$$\cos(x, y) = \frac{x\cdot y}{||x||\times||y||}$$
 
 where the numerator is the dot product between the two vectors.
 
 #### Tanimoto coefficient (extended Jaccard)
 Generalization of Jaccard coefficient for non-binary vectors:
 
-![](formulas/tanc.png "Tanimoto coefficient")
+$$\frac{x\cdot y}{||x||^2+||y||^2-x \cdot y}$$.
 
 #### Correlation
 Correlation measures the linear relationship between objects. To compute correlation, we standardize the data objects _x_ and _y_ and take their dot product.
@@ -234,21 +234,21 @@ Frequency of occurrence of an itemset.
 ### Frequent itemset
 Itemset whose support is greater than or equal to a _minsup_ threshold.
 
- ### Association rule
- Implication rule of the form X -> Y, where X and Y are itemsets, such as {Diapers} -> {Beer} (NB: __-> means co-occurrence, not causality!__).
+### Association rule
+Implication rule of the form $X \rightarrow Y$, where $X$ and $Y$ are itemsets, such as $\left \{ Diapers \right \} \rightarrow \left \{ Beer \right \}$ (NB: $\rightarrow$ __means co-occurrence, not causality!__).
 
 ### Rule evaluation metrics
 #### Support
-Fraction of transactions that contain an itemset X (typically composed by both the left and right hand sides of an association rule):
+Fraction of transactions that contain an itemset $X \cup Y$ (typically composed by both the left and right hand sides of an association rule):
 
-![](formulas/supp.png "Support formula")
+$$supp(X \cup Y) = \frac{|t \in T; X \subseteq t|}{|T|}$$
 
-where T is the set containing all transactions. Support is important because a rule with high confidence but very low support may have occurred simply by chance.
+where $T$ is the set containing all transactions. Support is important because a rule with high confidence but very low support may have occurred simply by chance.
 
 #### Confidence
-Measure of how often items in Y appear in transactions that contain X, i.e. measure of the reliability of the inference made by a rule:
+Measure of how often items in $Y$ appear in transactions that contain $X$, i.e. measure of the reliability of the inference made by a rule:
 
-![](formulas/conf.png "Confidence formula")
+$$conf(X \rightarrow Y) = \frac{supp(X \cup Y)}{supp(X)}$$
 
 ## Association rule mining
 The goal of association rule mining is to find all the rules having support >= _minsup_ and confidence >= _minconf_, where _minsup_ and _minconf_ are the corresponding support and confidence thresholds.
@@ -258,12 +258,12 @@ An initial step towards improving performances is to decouple the support and co
 1. __frequent itemset generation__ (_frequent_ means that support >= _minsup_);
 2. high confidence __rule generation__ from each frequent itemset, where each rule is a bipartition of a frequent itemset.
 
-Still, the straightforward approach to step 1, i.e. computing support for each possible itemset, is too expensive, because the total number of itemsets is M = 2<sup>k</sup>-1, where _k_ is the number of unique items (excluding the null set).
+Still, the straightforward approach to step 1, i.e. computing support for each possible itemset, is too expensive, because the total number of itemsets is $M = 2^{k}-1$, where $k$ is the number of unique items (excluding the null set).
 There are in fact three strategies to improve frequent itemset generation performances:
 
-1. using pruning techniques to reduce the number of candidates __M__;
-2. reduce the number of transactions __N__;
-3. reduce the number of comparisons __NM__ using efficient data structures.
+1. using pruning techniques to reduce the number of candidates $M$;
+2. reduce the number of transactions $N$;
+3. reduce the number of comparisons $NM$ using efficient data structures.
 
 The following sections aim to give a more detailed explanation of the three approaches we just mentioned. To make things easier to understand, a lattice structure can be used to enumerate the list of all possible itemsets. Here's an example:
 ![](images/latt0.png "Itemset lattice")
@@ -275,11 +275,10 @@ An effective way to reduce frequent itemset candidates is based on the __apriori
 
 This __support-based pruning__ strategy is made possible by a key property of support, namely, that the support for an itemset never exceeds the support for its subset (__anti-monotone property__).
 
- #### Apriori algorithm
+#### Apriori algorithm
  
 
 ### Approach 2: reducing N
-
 
 ### Approach 3: reducing MN
 

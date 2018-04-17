@@ -1,3 +1,11 @@
 annotation {
     display: none
 }
+
+.display {
+    height: 10px; 
+}
+
+.inline {
+    height: 20px;
+}
