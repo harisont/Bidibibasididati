@@ -251,24 +251,31 @@ Measure of how often items in $Y$ appear in transactions that contain $X$, i.e. 
 $$conf(X \rightarrow Y) = \frac{supp(X \cup Y)}{supp(X)}$$
 
 ## Association rule mining
-The goal of association rule mining is to find all the rules having support >= _minsup_ and confidence >= _minconf_, where _minsup_ and _minconf_ are the corresponding support and confidence thresholds.
+The goal of association rule mining is to find all the rules having $supp \geq minsupp$ and $conf \geq minconf$, where $minsup$ and $minconf$ are the corresponding support and confidence thresholds.
 The brute-force approach is to compute support and confidence for every possible rule, but as there are exponentially many rules that can be extracted from a data set, this is prohibitively expensive.
 An initial step towards improving performances is to decouple the support and confidence requirements. This results in a two-step approach:
 
-1. __frequent itemset generation__ (_frequent_ means that support >= _minsup_);
+1. __frequent itemset generation__ (_frequent_ means that $supp \geq minsup$);
 2. high confidence __rule generation__ from each frequent itemset, where each rule is a bipartition of a frequent itemset.
 
-Still, the straightforward approach to step 1, i.e. computing support for each possible itemset, is too expensive, because the total number of itemsets is $M = 2^{k}-1$, where $k$ is the number of unique items (excluding the null set).
+Various factors affect the complexity of association rule mining:
+
+- choice of $minsup$,
+- dimensionality of the data set,
+- number of transaction,
+- average number of items involved in a transaction.
+
+In any case, more often than not the straightforward approach to step 1, i.e. computing support for each possible itemset, is too expensive, because the total number of itemsets is $M = 2^{k}-1$, where $k$ is the number of unique items (excluding the null set).
 There are in fact three strategies to improve frequent itemset generation performances:
 
 1. using pruning techniques to reduce the number of candidates $M$;
-2. reduce the number of transactions $N$;
-3. reduce the number of comparisons $NM$ using efficient data structures.
+2. reducing the number of transactions $N$;
+3. reducing the number of comparisons $NM$ using efficient data structures.
 
-The following sections aim to give a more detailed explanation of the three approaches we just mentioned. To make things easier to understand, a lattice structure can be used to enumerate the list of all possible itemsets. Here's an example:
+The following sections aim to give a more detailed explanation of two of the three approaches we just mentioned. To make things easier to understand, a lattice structure can be used to enumerate the list of all possible itemsets. Here's an example:
 ![](images/latt0.png "Itemset lattice")
 
-### Approach 1: reducing M
+### Approach 1: reducing the number of candidates
 An effective way to reduce frequent itemset candidates is based on the __apriori principle__, i.e.: _if an itemset is frequent, then all of its subset are also frequent_. Conversely, if an itemset is infrequent, all of its supersets are also infrequent, so that, as shown in the following picture, as soon as an itemset is found to be infrequent, the entire subgraph containing its superset can be pruned. 
 
 ![](images/latt1.png "Approach 1 lattice")
@@ -287,7 +294,6 @@ repeat
 until no new frequent itemsets are identified
 ```
 
-### Approach 2: reducing N
-
-### Approach 3: reducing MN
+### Approach 3: reducing the number of comparisons
+To reduce the number of comparisons, candidates are stored in a __hash tree__. The generation of such hash tree requires an hash function and a max leaf size, i.e. the maximum number of itemsets stored in a leaf node (if the number of candidate itemsets exceedes this quantity, the node is split). This way, instead of matching each transaction against every candidate subset, it is possible to match it against candidates contained in the hashed buckets.
 
