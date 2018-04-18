@@ -10,7 +10,7 @@ Unfortunately, all the exercises are in Italian. They sorted by the database or 
 The DMBS I used is postgres.
 
 ## On notes
-I like to read my notes on my e-reader. If you'd like something similar, I sugggest that you install pando and run 
+I like to read my notes on my e-reader. If you'd like something similar, I sugggest that you install pandoc and run 
 ```
 pandoc dm.md -t epub -o dm.epub 
 ```
