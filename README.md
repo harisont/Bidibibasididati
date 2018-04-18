@@ -22,7 +22,7 @@ For Pocketbook owners, I suggest that you use
 ```
 pandoc dm.md -t epub2 -o dm.epub --css poketbook_style.css --webtex
 ```
-even though I am still working on the CSS that produce the best output for such e-readers.
+even though I am still working on the CSS to produce the best output for such e-readers.
 
 ## On the personal project
 The project (Life scheduler) is a really simple productivity tool that runs in a terminal. It is a blueprint for a slightly more complex Android app I may develop one day.
