@@ -298,3 +298,11 @@ until no new frequent itemsets are identified
 ### Approach 3: reducing the number of comparisons
 To reduce the number of comparisons, candidates are stored in a __hash tree__. The generation of such hash tree requires an hash function and a max leaf size, i.e. the maximum number of itemsets stored in a leaf node (if the number of candidate itemsets exceedes this quantity, the node is split). This way, instead of matching each transaction against every candidate subset, it is possible to match it against candidates contained in the hashed buckets.
 
+Even one of the above techniques is applied, the number of frequent itemsets can be large, so that it is useful to identify a small set of itemset from which all other frequent itemsets can be derived. Two possible representation are:
+
+- __maximal frequent itemsets__: a maximal frequent itemset is an itemset for which none of its supersets are frequent;
+- __closed frequent itemsets__: an itemset is closed if none of its _immediate_ supersets has the same support.
+
+![](images/freq_itsets.png "Relationship between frequent itemsets, maximal frequent itemsets and closed frequent itemsets")
+
+
