@@ -227,7 +227,7 @@ This chapter presents a methodology known as _association analysis_, useful to d
 
 ### Itemset 
 Any subset of all items in a market basket data is said to be an itemset. Each transaction consists of an itemset.
-An itemset containing _k_ objects is called a _k_-itemset.
+An itemset containing $k$ objects is called a $k$-itemset.
 
 ### Support count
 Frequency of occurrence of an itemset.
@@ -296,7 +296,7 @@ until no new frequent itemsets are identified
 ```
 
 ### Approach 3: reducing the number of comparisons
-To reduce the number of comparisons, candidates are stored in a __hash tree__. The generation of such hash tree requires an hash function and a max leaf size, i.e. the maximum number of itemsets stored in a leaf node (if the number of candidate itemsets exceedes this quantity, the node is split). This way, instead of matching each transaction against every candidate subset, it is possible to match it against candidates contained in the hashed buckets.
+To reduce the number of comparisons, candidates are stored in a __hash tree__. The generation of such hash tree requires an hash function and a max leaf size, i.e. the maximum number of itemsets stored in a leaf node (if the number of candidate itemsets exceeds this quantity, the node is split). This way, instead of matching each transaction against every candidate subset, it is possible to match it against candidates contained in the hashed buckets.
 
 Even one of the above techniques is applied, the number of frequent itemsets can be large, so that it is useful to identify a small set of itemset from which all other frequent itemsets can be derived. Two possible representation are:
 
@@ -305,4 +305,23 @@ Even one of the above techniques is applied, the number of frequent itemsets can
 
 ![](images/freq_itsets.png "Relationship between frequent itemsets, maximal frequent itemsets and closed frequent itemsets")
 
+### Alternative methods for generating frequent itemsets
+The above mentioned _apriori_ algorithm provides significant performance improvement; still, it incurs considerable I/O overhead, as it requires scanning the data set many times. Therefore, it's worth mentioning some alternative methods for generating  frequent itemsets.
 
+#### Changing the traversal of itemset lattice strategy
+The way the frequent itemsets lattice is traversed is dictated by the chosen search strategy. Here's an overview of the main kinds of strategies.
+
+##### General-to-specific and vice versa
+The _apriori_ algorithm employs a general-to-specific strategy, where pairs of frequent itemsets are $(k-1)$-itemsets are merged into candidate itemsets of length $k$. This strategy is effective only if the maximum length of a frequent itemset isn't too long. Alternatively, a specific-to-general strategy, useful to discover maximal frequent itemsets, shall be used. More specifically, if a $k$-itemset is maximal frequent, there's no need to examine any of its subsets. This approaches can be combined (__bidirectional approach__) to rapidly identify the so-called _frequent itemset border_.
+
+![](images/sp2gen.png "General-to-specific, specific-to-general and bidirectional search")
+
+##### Equivalence classes
+Another way to envision the traversal is to first partition the lattice into disjoint groups of nodes (equivalence classes). It is then possible to search by group. In the _apriori_ algorithm, equivalence classes are defined according to the itemset size, but another way of defining them is based on the prefix/suffix labels of an itemset.
+
+![](images/equiv.png "Equivalence classes based on prefix and suffix labels of itemsets")
+
+##### Breadth-first and depth first
+The _apriori_ algorithm is a breadth-first algorithm, while a depth-first approach is often used by algorithms designed to find maximal frequent itemsets.
+
+#### Choosing an appropriate representation of the database
