@@ -261,7 +261,7 @@ An initial step towards improving performances is to decouple the support and co
 
 Various factors affect the complexity of association rule mining:
 
-- choice of $minsup$,
+- choice of $minsupp$,
 - dimensionality of the data set,
 - number of transaction,
 - average number of items involved in a transaction.
@@ -321,7 +321,16 @@ Another way to envision the traversal is to first partition the lattice into dis
 
 ![](images/equiv.png "Equivalence classes based on prefix and suffix labels of itemsets")
 
-##### Breadth-first and depth first
+##### Breadth-first and depth-first
 The _apriori_ algorithm is a breadth-first algorithm, while a depth-first approach is often used by algorithms designed to find maximal frequent itemsets.
 
-#### Choosing an appropriate representation of the database
+#### FP-growth algorithm
+The FP-growth algorithm takes a radically different approach. Instead of generating and testing candidate frequent itemsets like the _apriori_ algorithm does, it encodes the data using a compact data structure called __FP-tree__ and it extracts frequent itemsets directly from this structure.
+More specifically, the FP-tree is a compressed representation of the data set, obtained by reading the data set one transaction at a time while mapping each of them onto a path in the tree. Transactions sharing a lot of items are likely to have overlapping paths, and the more they overlap, the more compression can be achieved. 
+Once an FP-tree has been constructed, rules are mined using a recursive approach.
+
+#### ECLAT algorithm
+The ECLAT algorithm uses equivalence classes and a depth-first approach. The data set is stored vertically, i.e. for each item, a list of transaction ids is stored. With this algorithm, support count is very fast, as determining support of any $k$-itemset just consists in intersecting the transaction ids of two of its $(k-1)$ subsets, bug intermediate lists can easily become huge.
+
+### Rule generation
+Let's now talk about the second step of association rule mining: rule generation.
