@@ -297,23 +297,18 @@ until no new frequent itemsets are identified
 ```
 
 ##### Alternative methods for generating frequent itemsets
-The above mentioned _apriori_ algorithm provides significant performance improvement; still, it incurs considerable I/O overhead, as it requires scanning the data set many times. Therefore, it's worth mentioning some alternative methods for generating  frequent itemsets.
+The above mentioned _apriori_ algorithm provides significant performance improvement; still, it incurs considerable I/O overhead, as it requires scanning the data set many times. Therefore, it's worth mentioning some alternative methods for generating  frequent itemsets:
 
-###### Changing the traversal of itemset lattice strategy
-The way the frequent itemsets lattice is traversed is dictated by the chosen search strategy. Here's an overview of the main kinds of strategies.
-
-####### General-to-specific and vice versa
-The _apriori_ algorithm employs a general-to-specific strategy, where pairs of frequent itemsets are $(k-1)$-itemsets are merged into candidate itemsets of length $k$. This strategy is effective only if the maximum length of a frequent itemset isn't too long. Alternatively, a specific-to-general strategy, useful to discover maximal frequent itemsets, shall be used. More specifically, if a $k$-itemset is maximal frequent, there's no need to examine any of its subsets. This approaches can be combined (__bidirectional approach__) to rapidly identify the so-called _frequent itemset border_.
+- __changing the traversal of itemset lattice strategy__: the way the frequent itemsets lattice is traversed is dictated by the chosen search strategy. Here's an overview of the main kinds of strategies;
+- __general-to-specific and vice versa__: the _apriori_ algorithm employs a general-to-specific strategy, where pairs of frequent itemsets are $(k-1)$-itemsets are merged into candidate itemsets of length $k$. This strategy is effective only if the maximum length of a frequent itemset isn't too long. Alternatively, a specific-to-general strategy, useful to discover maximal frequent itemsets, shall be used. More specifically, if a $k$-itemset is maximal frequent, there's no need to examine any of its subsets. This approaches can be combined (__bidirectional approach__) to rapidly identify the so-called _frequent itemset border_
 
 ![](images/sp2gen.png "General-to-specific, specific-to-general and bidirectional search")
 
-####### Equivalence classes
-Another way to envision the traversal is to first partition the lattice into disjoint groups of nodes (equivalence classes). It is then possible to search by group. In the _apriori_ algorithm, equivalence classes are defined according to the itemset size, but another way of defining them is based on the prefix/suffix labels of an itemset.
+- __equivalence classes__: another way to envision the traversal is to first partition the lattice into disjoint groups of nodes (equivalence classes). It is then possible to search by group. In the _apriori_ algorithm, equivalence classes are defined according to the itemset size, but another way of defining them is based on the prefix/suffix labels of an itemset
 
 ![](images/equiv.png "Equivalence classes based on prefix and suffix labels of itemsets")
 
-####### Breadth-first and depth-first
-The _apriori_ algorithm is a breadth-first algorithm, while a depth-first approach is often used by algorithms designed to find maximal frequent itemsets.
+- __breadth-first and depth-first__: the _apriori_ algorithm is a breadth-first algorithm, while a depth-first approach is often used by algorithms designed to find maximal frequent itemsets.
 
 ###### FP-growth algorithm
 The FP-growth algorithm takes a radically different approach. Instead of generating and testing candidate frequent itemsets like the _apriori_ algorithm does, it encodes the data using a compact data structure called __FP-tree__ and it extracts frequent itemsets directly from this structure.
@@ -335,4 +330,12 @@ Even one of the above techniques is applied, the number of frequent itemsets can
 
 ### Phase 2: rule generation
 Let's now talk about the second step of association rule mining: rule generation.
+Ignoring rules having empty antecedents or consequents, a $k$-itemset can produce up to $2^k-2$ association rules. To find an efficient way to generate rules from frequent itemsets (NB: starting from a frequent itemset means all candidate rules satisfy the support threshold), it's important to observe that __confidence doesn't have an anti-monotone property, *unless* rules are generated from the same itemset__. This gives us a way to prune the lattice of rules as soon as a a low confidence rule is found.
+
+#### Rule generation in the _Apriori_ algorithm
+The __Apriori__ algorithm uses a level-wise approach for generating association rules, where each level corresponds to the number of items contained in the right-hand side of the rule. Initially, all the high-confidence rules have only one item in their right side. They are then merged into rules with two items in their right-hand side according to the portion of their left-hand side they share etc.
+Example: rules $\{acd\} \rightarrow \{b\}$ and $\{abd\} \rightarrow \{c\}$ are merged into $\{ad\} \rightarrow \{bc\}$. As we just mentioned, finding a low confidence rule means the entire subgraph of such rule can be pruned.
+
+![](images/rulpru.png "Pruning of association rules")
+
 
