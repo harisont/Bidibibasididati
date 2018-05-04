@@ -6,7 +6,7 @@ Courses (UniPG, year 2017-18):
 This repo contains a ton of exercises (with solutions likely to be correct) for both courses, some data mining notes written in markdown and a small personal project in SQL+python.
 
 ## On exercises
-Unfortunately, all the exercises are in Italian. They sorted by the database or schema they use. 
+Unfortunately, all the exercises are in Italian. Still, the _Basi di dati e sistemi informativi_ ones may be very useful for someone who needs to prepare that exam. They sorted by the database or schema they use. The scans of the assignment text are stored in [this](https://github.com/harisont/Bidibibasididati/blob/master/Basi%20di%20dati%20e%20sistemi%20informativi/Consegne%20esercizi.pdf) file. All exercises are solved except on the last page's ones, which is an exam. 
 The DMBS I used is postgres.
 
 ## On notes
