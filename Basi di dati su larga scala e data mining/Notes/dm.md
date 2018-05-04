@@ -244,7 +244,7 @@ Fraction of transactions that contain an itemset $X \cup Y$ (typically composed 
 
 $$supp(X \cup Y) = \frac{|t \in T; X \subseteq t|}{|T|}$$
 
-where $T$ is the set containing all transactions. Support is important because a rule with high confidence but very low support may have occurred simply by chance.
+where $T$ is the set containing all transactions. Support is important because a rule with high confidence but very low support may have occurred simply by chance (also, a low $minsup$ threshold is computationally expensive). At the same time, if the $minsupp$ is set too high, we'll likely miss interesting itemsets involving rare items. That's why using a single $minsup$ threshold may not be a good choice. We will talk about a way to apply multiple $minsup$ thresholds later on, in the context of the _Apriori_ algorithm.
 
 #### Confidence
 Measure of how often items in $Y$ appear in transactions that contain $X$, i.e. measure of the reliability of the inference made by a rule:
@@ -296,6 +296,8 @@ repeat
 until no new frequent itemsets are identified
 ```
 
+A way to apply multiple $minsupp$ thresholds in this context consists in assigning a $minsupp$ threshold to each item, ordering the items in ascending order according to it and modifying the pruning step of the above algorithm so that it happens only the subset contains the first item.
+
 ##### Alternative methods for generating frequent itemsets
 The above mentioned _apriori_ algorithm provides significant performance improvement; still, it incurs considerable I/O overhead, as it requires scanning the data set many times. Therefore, it's worth mentioning some alternative methods for generating  frequent itemsets:
 
@@ -338,4 +340,30 @@ Example: rules $\{acd\} \rightarrow \{b\}$ and $\{abd\} \rightarrow \{c\}$ are m
 
 ![](images/rulpru.png "Pruning of association rules")
 
+### Pattern evaluation
+Association analysis algorithms tend to generate too many rules, often uninteresting or redundant, so it is important to establish a set of well-accepted criteria, called to evaluate (and prune/rank) them. To this purpose, a few other objective interestingness measures have been formulated in addition to support and confidence (some other criteria shall be established through subjective arguments, too).
+
+#### Objective measures of interestingness
+An objective, domain-independent measure of interestingness is usually computed based on the frequency counts tabulated in a _contingency table_. Here's an example (given a rule $X \rightarrow Z$):
+
+|  | $B$ | $\neg B$ |  |
+|:---:|:---:|:---:|:---:|
+| $A$ | $f_{11}$ | $f_{10}$ | $f_{1*}$ |
+| $\neg A$ | $f_{01}$ | $f_{00}$ | $f_{0*}$ |
+|  | $f_{*1}$ | $f_{*0}$ | N |
+
+ A good objective measure that takes into account __statistical dependence__ must satisfy:
+
+- $M(A, B) = 0$ if $A$ and $B$ are statistically independent;
+- $M(A, B)$ increases monotonically with $P(A, B)$ when $P(A)$ and $P(B)$ remain unchanged;
+- $M(A, B)$ decreases monotonically with $P(A)$ (resp. $P(B)$ when $P(A, B)$ and $P(B)$ (resp. $P(A)$) remain unchanged.
+
+NB: in general, $M(A, B) \neq M(B, A)$: if $M(A, B) = M(B, A)$, the measure is said to be _symmetric_.
+
+Here are some examples:
+
+- $Lift = \frac{P(Y \mid X)}{P(Y)}$;
+- $Interest = \frac{P(X, Y)}{P(X)P(Y)}$;
+- $PS = P(X, Y)-P(X)P(Y)$;
+- $\varphi -coefficient = \frac{P(X, Y)-P(X)P(Y)}{\sqrt{P(X)[1-P(X)]P(Y)[1-P(Y)]}}$.
 
