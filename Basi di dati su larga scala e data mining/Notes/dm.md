@@ -367,3 +367,9 @@ Here are some examples:
 - $PS = P(X, Y)-P(X)P(Y)$;
 - $\varphi -coefficient = \frac{P(X, Y)-P(X)P(Y)}{\sqrt{P(X)[1-P(X)]P(Y)[1-P(Y)]}}$.
 
+# Classification
+
+Classification is a pervasive problem with many applications.
+The input data for a classification task is _training set_ where each record is characterized by a tuple $(X, y)$ where $X$ is the attribute set and $y$ is the _class label_, which must be discrete (if $y$ is continuous, it means we're dealing with a __regression__ task). We can define classification as the task of learning a _target function_ $f$ (aka __classification model__) that maps each attribute set x to one of the predefined class labels $y$. 
+The goal for such model is either to explain explain what features define a class (__descriptive modeling__) or to assign previously unseen records to a class as accurately as possible (__predictive modeling__).
+
