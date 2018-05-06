@@ -371,5 +371,13 @@ Here are some examples:
 
 Classification is a pervasive problem with many applications.
 The input data for a classification task is _training set_ where each record is characterized by a tuple $(X, y)$ where $X$ is the attribute set and $y$ is the _class label_, which must be discrete (if $y$ is continuous, it means we're dealing with a __regression__ task). We can define classification as the task of learning a _target function_ $f$ (aka __classification model__) that maps each attribute set x to one of the predefined class labels $y$. 
-The goal for such model is either to explain explain what features define a class (__descriptive modeling__) or to assign previously unseen records to a class as accurately as possible (__predictive modeling__).
+The goal for such model is either to explain explain what features define a class (__descriptive modeling__) or to assign previously unseen records to a class as accurately as possible (__predictive modeling__). 
+A good way to evaluate the performance of a predictive model is based on the counts of correctly and incorrectly predicted test records, usually stored in the so-called __*confusion matrix*__. 
+Here's an example for a 2-class problem:
 
+![](images/binclass.png "Confusion matrix for a 2-class problem")
+
+To summarize this counts into a single number, a performance metric such as accuracy or error rate is used:
+
+- $Accuracy = \frac{|correct predictions|}{|total predictions|} = \frac{f_{00} + f_{11}}{f_{00} + f_{01} + f_{10} + f_ {11}}$;
+- $Error rate = \frac{|wrong predictions|}{|total predictions|} = \frac{f_{01} + f_{10}}{f_{00} + f_{01} + f_{10} + f_ {11}}$
