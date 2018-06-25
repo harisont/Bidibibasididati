@@ -380,4 +380,6 @@ Here's an example for a 2-class problem:
 To summarize this counts into a single number, a performance metric such as accuracy or error rate is used:
 
 - $Accuracy = \frac{|correct predictions|}{|total predictions|} = \frac{f_{00} + f_{11}}{f_{00} + f_{01} + f_{10} + f_ {11}}$;
-- $Error rate = \frac{|wrong predictions|}{|total predictions|} = \frac{f_{01} + f_{10}}{f_{00} + f_{01} + f_{10} + f_ {11}}$
+- $Error \ rate = \frac{|wrong predictions|}{|total predictions|} = \frac{f_{01} + f_{10}}{f_{00} + f_{01} + f_{10} + f_ {11}}$
+
+
