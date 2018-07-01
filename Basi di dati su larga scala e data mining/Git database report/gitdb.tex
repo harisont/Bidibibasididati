@@ -13,6 +13,11 @@
   \includegraphics[#2]{#1}
   \caption{#3}
   \end{figure}}
+\def\termimage[#1][#2]{
+	\begin{figure}[h]
+		\centering
+		\includegraphics[#2]{#1}
+\end{figure}}
 
 \title{Il database sottostante Git}
 \author{Arianna Masciolini}
@@ -25,7 +30,7 @@
 \section{Introduzione}
 Un \textit{Version Control System} (VCS) è un sistema che tiene traccia delle modifiche apportate ad uno o più file in modo da garantire all'utente la possibilità di accedere alle versioni precedenti dei file suddetti in qualsiasi momento. 
 \bigskip \\
-I primi sistemi di controllo di versione, locali, nacquero con l'idea di risolvere i problemi legati a quello che potrebbe essere definito versioning "manuale", consistente nel conservare più copie dei file d'interesse: la forte suscettibilità a errori e lo spreco di spazio su disco. Tra questi, RCS ha goduto ha lungo di grande popolarità: esso salva su disco, in un particolare formato, una serie di \textit{patch}, ossia le differenze tra una versione e l'altra dei file, in modo tale da poter ricostruire lo stato in cui era ognuno di essi in qualsiasi momento, applicandovi una dopo l'altra le varie patch.
+I primi sistemi di controllo di versione, locali, nacquero con l'idea di risolvere i problemi legati a quello che potrebbe essere definito versioning "manuale", consistente nel conservare più copie dei file d'interesse: la forte suscettibilità a errori e lo spreco di spazio su disco. Tra questi VCS locali, RCS ha goduto ha lungo di grande popolarità: esso salva su disco, in un particolare formato, una serie di \textit{patch}, ossia le differenze tra una versione e l'altra dei file, in modo tale da poter ricostruire lo stato in cui era ognuno di essi in qualsiasi momento, applicandovi una dopo l'altra le varie patch.
 \bigskip \\
 Successivamente, ci si pose il problema di permettere a più persone di collaborare a distanza. Per risolverlo nacquero i sistemi centralizzati di controllo di versione (CVCS), come CVS, Subversion, e Perforce. In questi sistemi, per il resto analoghi ad RCS e simili, tutte le versioni dei file controllati sono salvate su un unico server e rese così disponibili ai diversi utenti. Anche questo approccio presenta però problematiche importanti, dovute al fatto che il server centrale rappresenta un punto di vulnerabilità per l'intero sistema. 
 \bigskip \\
@@ -34,23 +39,14 @@ I DVCS (\textit{Distributed VCS}), di cui Git, Mercurial, Bazaar e Darcs sono gl
 \bigskip \\
 In particolare, Git -ad oggi il VCS più diffuso \cite{openhub}- si differenzia tanto dagli altri sistemi distribuiti quanto dai loro predecessori per il modo in cui memorizza i dati: non come una serie di \textit{patch} legate ai vari file, ma come una serie di "istantanee" di un filesystem in miniatura, accessibili tramite puntatori.
 L'obiettivo di questa relazione è, per l'appunto, descrivere l'approccio adottato da Git in tale ambito, in modo da comprendere quali ne siano i vantaggi rispetto alle soluzioni adottate dai sistemi concorrenti.
-Nella sezione seguente verranno brevemente richiamati alcuni concetti di base riguardo il funzionamento di Git, utili per rendere più chiare e sintetiche le spiegazioni più strettamente legate al suo modello di branching e al sottostante database.  
+Nella sezione successiva verranno brevemente richiamati alcuni concetti di base riguardo il funzionamento di Git, utili per rendere più chiare e sintetiche le spiegazioni più strettamente legate al suo modello di branching e al sottostante database.  
 \newpage
 \section{Nozioni di base su Git} % chapters: Git basics + Git branching
-\code{
-	\begin{itemize}
-		\item brevissima storia (causa)
-		\item località delle operazioni
-		\item integrità delle informazioni
-		\item 3 stati
-		\item git directory, working tree e staging area
-		\item remotes (?)
-		\item modello di branching
-	\end{itemize}
+(...)
+\termimage[init.png][scale=1.5]
 \section{Il database di Git} % chapter: Git internals -> Git objects
-\subsubsection{Git objects}
-\subsubsection{Git references}
-}
+Git può essere definito come \textit{\underline{filesystem} orientato ai contenuti}. Questo significa che il nucleo di Git è un database chiave-valore: all'inserimento di un oggetto in un \underline{repository}, Git restituirà la \underline{chiave} con la quale esso è univocamente identificato. Per meglio rendersi conto del funzionamento di tale database, è opportuno inizializzare un repository
+
 \newpage
 \begin{thebibliography}{9}
 	\bibitem{git_pro}
