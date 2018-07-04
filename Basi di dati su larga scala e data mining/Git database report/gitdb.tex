@@ -15,12 +15,13 @@
   \includegraphics[#2]{#1}
   \caption{#3}
   \end{figure}}
-\def\termimage[#1][#2]{
+\def\boximage[#1][#2]#3{
 	\begin{figure}[h]
 		\centering
-		\includegraphics[#2]{#1}
+		\fbox{
+		\includegraphics[#2]{#1}}
+		\caption{#3}
 \end{figure}}
-
 \title{Il database sottostante Git}
 \author{Arianna Masciolini}
 
@@ -87,6 +88,7 @@ E' facile intuire, a questo punto, quale sia il tipico modo di procedere quando 
 \paragraph{Checksumming}
 Un'ulteriore, importante funzionalità di Git, parte integrante della sua filosofia, è quella di verificare qualsiasi file o directory, prima di archiviarlo, tramite una checksum che è poi utilizzata per riferirvisi. Ciò significa che è impossibile cambiarne il contenuto senza che Git ne sia a conoscenza, il che permette di rilevare qualsiasi perdita o corruzione di dati in transito. 
 Il meccanismo impiegato per generare tale checksum è la funzione crittografica SHA-1, il cui output, basato sul contenuto di un file o sulla struttura interna di una cartella, è un numero esadecimale di 40 caratteri.
+\image[init_tree.png][width=9.5cm]{La struttura del repository \code{demo}, appena creato con il comando \code{git init}.}
 \section{Il database di Git} % chapter: Git internals -> Git objects
 %Git può essere definito come \textit{\underline{filesystem} orientato ai contenuti}. Questo significa che il nucleo di Git è un database chiave-valore: all'inserimento di un oggetto in un \underline{repository}, Git restituirà la \underline{chiave} con la quale esso è univocamente identificato. Per meglio rendersi conto del funzionamento di tale database, è opportuno inizializzare un repository
 
