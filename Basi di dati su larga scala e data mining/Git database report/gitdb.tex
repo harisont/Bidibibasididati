@@ -58,8 +58,8 @@ L'obiettivo di questa relazione è, per l'appunto, descrivere l'approccio adotta
 Nella sezione successiva verranno brevemente richiamati alcuni concetti di base riguardo il funzionamento di Git, utili per rendere più chiare e sintetiche le spiegazioni più strettamente legate al suo modello di branching e al sottostante database.  
 \section{Nozioni di base su Git}
 Git, nato nel 2005 per favorire lo sviluppo del kernel Linux, è un sistema di controllo versione completamente distribuito che deve il suo successo al proprio modello di branching, che lo rende ottimale per la gestione di progetti open source, che hanno quasi sempre uno sviluppo non lineare.
-\paragraph{Git come filesystem in miniatura}
-Come si è accennato nella sezione precedente, Git adotta un approccio radicalmente differente rispetto a quello tradizionale, il cosiddetto controllo versione \textit{delta-based}, basato su una lista di \textit{patch}, ossia di modifiche, legate ai singoli file. Un repository Git è infatti una sorta di filesystem Unix-like semplificato, di cui viene fatta una sorta d'"istantanea" resa accessibile mediante un puntatore ogniqualvolta lo stato del progetto viene salvato.
+\bigskip \\
+Come si è accennato nella sezione precedente, Git adotta un approccio radicalmente differente rispetto a quello tradizionale, il cosiddetto controllo versione \textit{delta-based}, basato su una lista di \textit{patch}, ossia di modifiche, legate ai singoli file. Un repository Git è infatti una sorta di filesystem Unix-like semplificato, di cui viene fatta una sorta di "istantanea" resa accessibile mediante un puntatore ogniqualvolta lo stato del progetto viene salvato.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=13cm]{delta-based.png}
@@ -68,18 +68,27 @@ Come si è accennato nella sezione precedente, Git adotta un approccio radicalme
 	\caption*{(b)}
 	\caption{Confronto il modo in cui vengono salvati i dati in un VCS delta-based (a) e quanto avviene in Git (b).}
 \end{figure}
-\paragraph{I tre stati}
-Per la comprensione del funzionamento di Git è fondamentale conoscere i tre stati in cui un file all'interno di un repository può trovarsi:
+\bigskip \\
+Quasi tutte le azioni possibili in Git consistono, in ultima analisi, nell' \textit{aggiungere} dati al sottostante database. Cancellare dei dati e, in generale, compiere azioni distruttive, è reso volutamente difficile, in modo tale da rendere pressoché impossibile perdere il proprio lavoro, se non altro a seguito di un \textit{commit}, l'azione tramite la quale i cambiamenti al repository vengono salvati.
+\bigskip \\
+Per meglio comprendere quale sia il significato di un commit in Git e, in generale, per ottenere un buon modello concettuale del funzionamento di tale sistema di controllo versione, è fondamentale conoscere gli stati in cui può trovarsi un file all'interno di un repository:
 \begin{itemize}
-	\item \textit{Committed}: il file è salvato permanentemente nel database locale;
-	\item \textit{Modified}: sono state effettuate delle modifiche al file
-	\item \textit{Staged}
+	\item \textit{modified}: sono state effettuate delle modifiche al file, non ancora confermate tramite un commit;
+	\item \textit{staged}: il file, che ha subito delle modifiche, è stato marcato come parte del prossimo commit;
+	\item \textit{committed}: il file è salvato permanentemente nel database locale tramite, appunto, un commit.
 \end{itemize}
+A questo punto è opportuno parlare della struttura di un repository Git, le cui parti principali sono:
+\begin{itemize}
+	\item il \textit{working tree}, consistente in una copia di una specifica versione del progetto, estratta dal database in modo da poter essere modificata dall'utente;
+	\item la cartella \code{.git}, dove vengono si trovano i metadati e l'\textit{object database}, sui cui ci soffermerà nella prossima sezione, relativi al progetto;
+	\item la \textit{staging area}, ossia un file (generalmente contenuto nella cartella \code{.git}) contenente le informazioni relative al contenuto del prossimo commit.
+\end{itemize}
+E' facile intuire, a questo punto, quale sia il tipico modo di procedere quando si lavora ad un progetto gestito con Git: dopo aver modificato uno o più file nel \textit{working tree}, si selezionano le modifiche di cui tener traccia nel commit successivo, aggiungendoli così alla \textit{staging area}. Nel momento in cui viene eseguito il comando \code{git commit} lo stato dei file nella \textit{staging area} viene salvato nella cartella \code{.git}.
 \paragraph{Checksumming}
-Un'importante funzionalità di Git, parte integrante della sua filosofia, è quella di verificare qualsiasi file o directory, prima di archiviarlo, tramite una checksum che è poi utilizzata per riferirvisi. Ciò significa che è impossibile cambiarne il contenuto senza che Git ne sia a conoscenza, il che permette di rilevare qualsiasi perdita o corruzione di dati in transito. 
+Un'ulteriore, importante funzionalità di Git, parte integrante della sua filosofia, è quella di verificare qualsiasi file o directory, prima di archiviarlo, tramite una checksum che è poi utilizzata per riferirvisi. Ciò significa che è impossibile cambiarne il contenuto senza che Git ne sia a conoscenza, il che permette di rilevare qualsiasi perdita o corruzione di dati in transito. 
 Il meccanismo impiegato per generare tale checksum è la funzione crittografica SHA-1, il cui output, basato sul contenuto di un file o sulla struttura interna di una cartella, è un numero esadecimale di 40 caratteri.
 \section{Il database di Git} % chapter: Git internals -> Git objects
-Git può essere definito come \textit{\underline{filesystem} orientato ai contenuti}. Questo significa che il nucleo di Git è un database chiave-valore: all'inserimento di un oggetto in un \underline{repository}, Git restituirà la \underline{chiave} con la quale esso è univocamente identificato. Per meglio rendersi conto del funzionamento di tale database, è opportuno inizializzare un repository
+%Git può essere definito come \textit{\underline{filesystem} orientato ai contenuti}. Questo significa che il nucleo di Git è un database chiave-valore: all'inserimento di un oggetto in un \underline{repository}, Git restituirà la \underline{chiave} con la quale esso è univocamente identificato. Per meglio rendersi conto del funzionamento di tale database, è opportuno inizializzare un repository
 
 \newpage
 \begin{thebibliography}{9}
