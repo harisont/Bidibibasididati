@@ -1,8 +1,10 @@
 % !TeX spellcheck = IT
 \documentclass[12pt]{article}
+\usepackage[top=1.5in, bottom=1.5in, left=1in, right=1in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
 \usepackage{graphicx}
+\usepackage{caption}
 \usepackage[colorlinks=false,linkcolor=blue]{hyperref}
 \usepackage{nameref} 
 \graphicspath{{./images/}}
@@ -35,15 +37,47 @@ I primi sistemi di controllo di versione, locali, nacquero con l'idea di risolve
 Successivamente, ci si pose il problema di permettere a più persone di collaborare a distanza. Per risolverlo nacquero i sistemi centralizzati di controllo di versione (CVCS), come CVS, Subversion, e Perforce. In questi sistemi, per il resto analoghi ad RCS e simili, tutte le versioni dei file controllati sono salvate su un unico server e rese così disponibili ai diversi utenti. Anche questo approccio presenta però problematiche importanti, dovute al fatto che il server centrale rappresenta un punto di vulnerabilità per l'intero sistema. 
 \bigskip \\
 I DVCS (\textit{Distributed VCS}), di cui Git, Mercurial, Bazaar e Darcs sono gli esempi più noti, risolvono questo problema: i membri del gruppo non si limitano a scaricare la più recente versione dei file, ma copiano l'intero repository, cosicchè ogni client costituisce un backup completo del progetto.
-\image[lcd.png][scale=0.8]{Confronto tra un VCS locale, un CVCS e un DVCS}
-\bigskip \\
-In particolare, Git -ad oggi il VCS più diffuso \cite{openhub}- si differenzia tanto dagli altri sistemi distribuiti quanto dai loro predecessori per il modo in cui memorizza i dati: non come una serie di \textit{patch} legate ai vari file, ma come una serie di "istantanee" di un filesystem in miniatura, accessibili tramite puntatori.
+\begin{figure}[h]
+	\centering
+		\begin{minipage}{4cm}
+			\includegraphics[height=3.5cm]{local.png}
+		\end{minipage}
+		\qquad
+		\begin{minipage}{4cm}
+			 \includegraphics[height=3.5cm]{centralized.png}
+		\end{minipage}
+		\qquad
+		\qquad
+		\begin{minipage}{4cm}
+			\includegraphics[height=3.5cm]{distributed.png}
+		\end{minipage}
+	\caption{Confronto tra un VCS locale, un CVCS e un DVCS.}
+\end{figure}
+\\In particolare, Git -ad oggi il VCS più diffuso \cite{openhub}- si differenzia tanto dagli altri sistemi distribuiti quanto dai loro predecessori per il modo in cui memorizza i dati: non come una serie di \textit{patch} legate ai vari file, ma come una serie di "istantanee" di un filesystem in miniatura, accessibili tramite puntatori.
 L'obiettivo di questa relazione è, per l'appunto, descrivere l'approccio adottato da Git in tale ambito, in modo da comprendere quali ne siano i vantaggi rispetto alle soluzioni adottate dai sistemi concorrenti.
 Nella sezione successiva verranno brevemente richiamati alcuni concetti di base riguardo il funzionamento di Git, utili per rendere più chiare e sintetiche le spiegazioni più strettamente legate al suo modello di branching e al sottostante database.  
-\newpage
-\section{Nozioni di base su Git} % chapters: Git basics + Git branching
-(...)
-\termimage[init.png][scale=1.5]
+\section{Nozioni di base su Git}
+Git, nato nel 2005 per favorire lo sviluppo del kernel Linux, è un sistema di controllo versione completamente distribuito che deve il suo successo al proprio modello di branching, che lo rende ottimale per la gestione di progetti open source, che hanno quasi sempre uno sviluppo non lineare.
+\paragraph{Git come filesystem in miniatura}
+Come si è accennato nella sezione precedente, Git adotta un approccio radicalmente differente rispetto a quello tradizionale, il cosiddetto controllo versione \textit{delta-based}, basato su una lista di \textit{patch}, ossia di modifiche, legate ai singoli file. Un repository Git è infatti una sorta di filesystem Unix-like semplificato, di cui viene fatta una sorta d'"istantanea" resa accessibile mediante un puntatore ogniqualvolta lo stato del progetto viene salvato.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=13cm]{delta-based.png}
+	\caption*{(a)\bigskip}
+	\includegraphics[width=13cm]{snapshots-based.png}
+	\caption*{(b)}
+	\caption{Confronto il modo in cui vengono salvati i dati in un VCS delta-based (a) e quanto avviene in Git (b).}
+\end{figure}
+\paragraph{I tre stati}
+Per la comprensione del funzionamento di Git è fondamentale conoscere i tre stati in cui un file all'interno di un repository può trovarsi:
+\begin{itemize}
+	\item \textit{Committed}: il file è salvato permanentemente nel database locale;
+	\item \textit{Modified}: sono state effettuate delle modifiche al file
+	\item \textit{Staged}
+\end{itemize}
+\paragraph{Checksumming}
+Un'importante funzionalità di Git, parte integrante della sua filosofia, è quella di verificare qualsiasi file o directory, prima di archiviarlo, tramite una checksum che è poi utilizzata per riferirvisi. Ciò significa che è impossibile cambiarne il contenuto senza che Git ne sia a conoscenza, il che permette di rilevare qualsiasi perdita o corruzione di dati in transito. 
+Il meccanismo impiegato per generare tale checksum è la funzione crittografica SHA-1, il cui output, basato sul contenuto di un file o sulla struttura interna di una cartella, è un numero esadecimale di 40 caratteri.
 \section{Il database di Git} % chapter: Git internals -> Git objects
 Git può essere definito come \textit{\underline{filesystem} orientato ai contenuti}. Questo significa che il nucleo di Git è un database chiave-valore: all'inserimento di un oggetto in un \underline{repository}, Git restituirà la \underline{chiave} con la quale esso è univocamente identificato. Per meglio rendersi conto del funzionamento di tale database, è opportuno inizializzare un repository
 
