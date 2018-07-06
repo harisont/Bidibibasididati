@@ -7,6 +7,8 @@
 \usepackage{caption}
 \usepackage[colorlinks=false,linkcolor=blue]{hyperref}
 \usepackage{nameref} 
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
 \graphicspath{{./images/}}
 \def\code#1{\texttt{#1}}
 \def\image[#1][#2]#3{
@@ -88,15 +90,60 @@ E' facile intuire, a questo punto, quale sia il tipico modo di procedere quando 
 \paragraph{Checksumming}
 Un'ulteriore, importante funzionalità di Git, parte integrante della sua filosofia, è quella di verificare qualsiasi file o directory, prima di archiviarlo, tramite una checksum che è poi utilizzata per riferirvisi. Ciò significa che è impossibile cambiarne il contenuto senza che Git ne sia a conoscenza, il che permette di rilevare qualsiasi perdita o corruzione di dati in transito. 
 Il meccanismo impiegato per generare tale checksum è la funzione crittografica SHA-1, il cui output, basato sul contenuto di un file o sulla struttura interna di una cartella, è un numero esadecimale di 40 caratteri.
-\image[init_tree.png][width=9.5cm]{La struttura del repository \code{demo}, appena creato con il comando \code{git init}.}
+%\image[init_tree.png][width=9.5cm]{La struttura del repository \code{demo}, appena creato con il comando \code{git init}.}
 \section{Il database di Git} % chapter: Git internals -> Git objects
-%Git può essere definito come \textit{\underline{filesystem} orientato ai contenuti}. Questo significa che il nucleo di Git è un database chiave-valore: all'inserimento di un oggetto in un \underline{repository}, Git restituirà la \underline{chiave} con la quale esso è univocamente identificato. Per meglio rendersi conto del funzionamento di tale database, è opportuno inizializzare un repository
-
+La componente fondamentale di Git è un \textbf{database chiave-valore}: all'inserimento di un oggetto in un repository, Git restituirà una chiave, tramite la quale esso sarà univocamente identificato. 
+Si può osservare in prima persona questo comportamento di Git utilizzando uno dei suoi comandi più a basso livello, \code{git hash-object}, che salva i dati che gli sono passati come input nell'\textit{object database}, ossia nella cartella \code{.git/objects}, e ne restituisce la checksum.
+Inizializziamo dunque un nuovo repository, \code{demo}:
+\begin{algorithm*}
+	\begin{algorithmic}
+		\State \code{\$ git init demo}
+		\State \code{Initialized empty Git repository in /home/harisont/demo/.git/}	
+	\end{algorithmic}
+\end{algorithm*}
+\\All'interno della cartella \code{.git} repository appena creato si trova per l'appunto la cartella dell'object database, contenente due sottocartelle, ma - come ci si aspetterebbe - ancora nessun file:
+\begin{algorithm*}
+	\begin{algorithmic}
+		\State \code{\$ cd demo}
+		\State \code{\$ find .git/objects}	
+		\State \code{.git/objects}	
+		\State \code{.git/objects/info}
+		\State \code{.git/objects/pack}
+		\State \code{\$ find .git/objects -type f}
+		\State \code{ \ }
+	\end{algorithmic}
+\end{algorithm*}
+\\Creiamo dunque un nuovo file ed inseriamolo nell'object database (senza l'opzione \code{-w}, otterremmo la checksum senza scrivere nulla nel database):
+\begin{algorithm*}
+	\begin{algorithmic}
+		\State \code{\$ touch first}
+		\State \code{\$ git hash-object first -w}	
+		\State \code{e69de29bb2d1d6434b8b29ae775ad8c2e48c5391}	
+	\end{algorithmic}
+\end{algorithm*}
+\\Ora la ricerca di file in \code{.git/objects} avrà un risultato di questo tipo:
+\begin{algorithm*}
+	\begin{algorithmic}
+		\State \code{\$ find .git/objects -type f}
+		\State \code{.git/objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391}	
+	\end{algorithmic}
+\end{algorithm*}
+Sono state create una sottocartella, il cui nome è costituito dai primi 2 caratteri della checksum, ed un file, ridenominato con i restanti 38.
+A questo punto, abbiamo tutti gli strumenti per utilizzare, sia pure in modo molto semplice, il nostro sistema di controllo versione: facendo una modifica al file \code{first} e salvandola tramite \code{git hash-object}, si fa in modo che l'object database contenga entrambe le versioni del file:
+\begin{algorithm*}
+	\begin{algorithmic}
+		\State \code{\$ echo 'first modification!' > first}
+		\State \code{\$ git hash-object first -w}	
+		\State \code{\$ find .git/objects -type f}
+		\State \code{.git/objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391}
+		\State \code{.git/objects/a9/16b860146f3db545e0e094f650d6e7b3dd4230}
+	\end{algorithmic}
+\end{algorithm*}
 \newpage
 \begin{thebibliography}{9}
 	\bibitem{git_pro}
 	Scott Chacon, Ben Straub. \textit{Git Pro}, seconda edizione, 2014.
 	\bibitem{openhub}
-	\url{openhub.net}
+	\url{openhub.net}. Ultima visita: 5/7/2018.
 \end{thebibliography}
 \end{document}
