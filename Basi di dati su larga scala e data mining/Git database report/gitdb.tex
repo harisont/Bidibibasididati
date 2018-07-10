@@ -11,6 +11,8 @@
 \usepackage[noend]{algpseudocode}
 \graphicspath{{./images/}}
 \def\code#1{\texttt{#1}}
+\def\quote#1{``#1''}
+\def\minquote#1{`#1'}
 \def\image[#1][#2]#3{
   \begin{figure}[h]
   \centering
@@ -35,7 +37,7 @@
 \section{Introduzione}
 Un \textit{Version Control System} (VCS) è un sistema che tiene traccia delle modifiche apportate ad uno o più file in modo da garantire all'utente la possibilità di accedere alle versioni precedenti dei file suddetti in qualsiasi momento. 
 \bigskip \\
-I primi sistemi di controllo di versione, locali, nacquero con l'idea di risolvere i problemi legati a quello che potrebbe essere definito versioning "manuale", consistente nel conservare più copie dei file d'interesse: la forte suscettibilità a errori e lo spreco di spazio su disco. Tra questi VCS locali, RCS ha goduto ha lungo di grande popolarità: esso salva su disco, in un particolare formato, una serie di \textit{patch}, ossia le differenze tra una versione e l'altra dei file, in modo tale da poter ricostruire lo stato in cui era ognuno di essi in qualsiasi momento, applicandovi una dopo l'altra le varie patch.
+I primi sistemi di controllo di versione, locali, nacquero con l'idea di risolvere i problemi legati a quello che potrebbe essere definito versioning \quote{manuale}, consistente nel conservare più copie dei file d'interesse: la forte suscettibilità a errori e lo spreco di spazio su disco. Tra questi VCS locali, RCS ha goduto ha lungo di grande popolarità: esso salva su disco, in un particolare formato, una serie di \textit{patch}, ossia le differenze tra una versione e l'altra dei file, in modo tale da poter ricostruire lo stato in cui era ognuno di essi in qualsiasi momento, applicandovi una dopo l'altra le varie patch.
 \bigskip \\
 Successivamente, ci si pose il problema di permettere a più persone di collaborare a distanza. Per risolverlo nacquero i sistemi centralizzati di controllo di versione (CVCS), come CVS, Subversion, e Perforce. In questi sistemi, per il resto analoghi ad RCS e simili, tutte le versioni dei file controllati sono salvate su un unico server e rese così disponibili ai diversi utenti. Anche questo approccio presenta però problematiche importanti, dovute al fatto che il server centrale rappresenta un punto di vulnerabilità per l'intero sistema. 
 \bigskip \\
@@ -56,13 +58,13 @@ I DVCS (\textit{Distributed VCS}), di cui Git, Mercurial, Bazaar e Darcs sono gl
 		\end{minipage}
 	\caption{Confronto tra un VCS locale, un CVCS e un DVCS.}
 \end{figure}
-\\In particolare, Git -ad oggi il VCS più diffuso \cite{openhub}- si differenzia tanto dagli altri sistemi distribuiti quanto dai loro predecessori per il modo in cui memorizza i dati: non come una serie di \textit{patch} legate ai vari file, ma come una serie di "istantanee" di un filesystem in miniatura, accessibili tramite puntatori.
+\\In particolare, Git -ad oggi il VCS più diffuso \cite{openhub}- si differenzia tanto dagli altri sistemi distribuiti quanto dai loro predecessori per il modo in cui memorizza i dati: non come una serie di \textit{patch} legate ai vari file, ma come una serie di \quote{istantanee} di un filesystem in miniatura, accessibili tramite puntatori.
 L'obiettivo di questa relazione è, per l'appunto, descrivere l'approccio adottato da Git in tale ambito, in modo da comprendere quali ne siano i vantaggi rispetto alle soluzioni adottate dai sistemi concorrenti.
-Nella sezione successiva verranno brevemente richiamati alcuni concetti di base riguardo il funzionamento di Git, utili per rendere più chiare e sintetiche le spiegazioni più strettamente legate al suo modello di branching e al sottostante database.  
+Nella sezione successiva verranno brevemente richiamati alcuni concetti di base riguardo il funzionamento di Git, utili per rendere più chiare e sintetiche le spiegazioni più strettamente legate al suo modello di branching e al sottostante database.
 \section{Nozioni di base su Git}
 Git, nato nel 2005 per favorire lo sviluppo del kernel Linux, è un sistema di controllo versione completamente distribuito che deve il suo successo al proprio modello di branching, che lo rende ottimale per la gestione di progetti open source, che hanno quasi sempre uno sviluppo non lineare.
 \bigskip \\
-Come si è accennato nella sezione precedente, Git adotta un approccio radicalmente differente rispetto a quello tradizionale, il cosiddetto controllo versione \textit{delta-based}, basato su una lista di \textit{patch}, ossia di modifiche, legate ai singoli file. Un repository Git è infatti una sorta di filesystem Unix-like semplificato, di cui viene fatta una sorta di "istantanea" resa accessibile mediante un puntatore ogniqualvolta lo stato del progetto viene salvato.
+Come si è accennato nella sezione precedente, Git adotta un approccio radicalmente differente rispetto a quello tradizionale, il cosiddetto controllo versione \textit{delta-based}, basato su una lista di \textit{patch}, ossia di modifiche, legate ai singoli file. Un repository Git è infatti una sorta di filesystem Unix-like semplificato, di cui viene fatta una sorta di \quote{istantanea} resa accessibile mediante un puntatore ogniqualvolta lo stato del progetto viene salvato.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=13cm]{delta-based.png}
@@ -129,21 +131,40 @@ Inizializziamo dunque un nuovo repository, \code{demo}:
 	\end{algorithmic}
 \end{algorithm*}
 Sono state create una sottocartella, il cui nome è costituito dai primi 2 caratteri della checksum, ed un file, ridenominato con i restanti 38.
-A questo punto, abbiamo tutti gli strumenti per utilizzare, sia pure in modo molto semplice, il nostro sistema di controllo versione: facendo una modifica al file \code{first} e salvandola tramite \code{git hash-object}, si fa in modo che l'object database contenga entrambe le versioni del file:
+A questo punto, abbiamo tutti gli strumenti per utilizzare, sia pure in modo molto semplice, il nostro sistema di controllo versione: facendo una modifica al file \code{first} e salvandola tramite \code{git hash-object}, si fa in modo che l'object database contenga entrambe le versioni del file, che resteranno disponibili anche qualora il file venisse rimosso dal \textit{working tree}:
 \begin{algorithm*}
 	\begin{algorithmic}
-		\State \code{\$ echo 'first modification!' > first}
+		\State \code{\$ echo \minquote{first modification!} > first}
 		\State \code{\$ git hash-object first -w}	
 		\State \code{\$ find .git/objects -type f}
 		\State \code{.git/objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391}
 		\State \code{.git/objects/a9/16b860146f3db545e0e094f650d6e7b3dd4230}
 	\end{algorithmic}
 \end{algorithm*}
+\ \\Tuttavia, utilizzare Git in questo modo è decisamente poco pratico, poiché per recuperare le versioni precedenti dei file è necessario utilizzare la checksum che lo identifica. Ciò è dovuto al fatto che, utilizzando il comando \code{git hash-object} non viene memorizzato il nome del file, ma solo il suo contenuto. Utilizzando la terminologia di Git, indicheremo gli oggetti di questo tipo come \textit{blob}.
+\subsection{Tipi di oggetti in Git}
+Chiaramente, i \textbf{blob} non sono i soli oggetti presenti in Git.
+Per permettere di salvare i nomi dei file e di raggrupparli, Git utilizza anche oggetti di tipo \textit{\textbf{tree}}. 
+Per meglio comprendere il ruolo che giocano questi due tipi di oggetti, basti pensare all'analogia tra Git ed un filesystem Unix: da una parte, i blob corrispondono, grosso modo, agli \textit{inodes}\footnote{in Unix, sono così chiamate le strutture dati che descrivono un oggetto del filesystem, ossia un file o una directory, memorizzandone i metadati e la posizione sul disco \cite{winode}.}, i tree corrispondono alle directory. 
+Un oggetto di tipo contiene un puntatore SHA-1 ad un blob o ad un sottoalbero.
+\begin{figure}[h]
+	\centering
+	\begin{minipage}{7cm}
+		\includegraphics[height=5cm]{data-model-graph.png}
+	\end{minipage}
+	\qquad
+	\begin{minipage}{7cm}
+		\includegraphics[height=2.5cm]{data-model-tree.png}
+	\end{minipage}
+	\caption{Corrispondenza tra oggetti di tipo tree e cartelle in un repository Git: sulla sinistra, il modello concettuale, sulla destra l'output del comando \code{tree}.}
+\end{figure}
 \newpage
 \begin{thebibliography}{9}
 	\bibitem{git_pro}
 	Scott Chacon, Ben Straub. \textit{Git Pro}, seconda edizione, 2014.
 	\bibitem{openhub}
 	\url{openhub.net}. Ultima visita: 5/7/2018.
+	\bibitem{winode}
+	\textit{inode}. Wikipedia. \url{https://en.wikipedia.org/wiki/Inode}. Ultima visita: 10/7/2018.
 \end{thebibliography}
 \end{document}
