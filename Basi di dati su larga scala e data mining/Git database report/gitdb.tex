@@ -1,6 +1,6 @@
 % !TeX spellcheck = IT
 \documentclass[12pt]{article}
-\usepackage[top=1.5in, bottom=1.5in, left=1in, right=1in]{geometry}
+\usepackage[top=1.5in, bottom=1.5in, left=1.2in, right=1.2in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
 \usepackage{graphicx}
@@ -86,13 +86,12 @@ A questo punto è opportuno parlare della struttura di un repository Git, le cui
 \begin{itemize}
 	\item il \textit{working tree}, consistente in una copia di una specifica versione del progetto, estratta dal database in modo da poter essere modificata dall'utente;
 	\item la cartella \code{.git}, dove vengono si trovano i metadati e l'\textit{object database}, sui cui ci soffermerà nella prossima sezione, relativi al progetto;
-	\item la \textit{staging area}, ossia un file (generalmente contenuto nella cartella \code{.git}) contenente le informazioni relative al contenuto del prossimo commit.
+	\item la \textit{staging area}, ossia il contenuto del prossimo commit, le informazioni relative al quale sono memorizzate nel file \code{index}, generalmente contenuto nella cartella \code{.git}. 
 \end{itemize}
 E' facile intuire, a questo punto, quale sia il tipico modo di procedere quando si lavora ad un progetto gestito con Git: dopo aver modificato uno o più file nel \textit{working tree}, si selezionano le modifiche di cui tener traccia nel commit successivo, aggiungendoli così alla \textit{staging area}. Nel momento in cui viene eseguito il comando \code{git commit} lo stato dei file nella \textit{staging area} viene salvato nella cartella \code{.git}.
 \paragraph{Checksumming}
 Un'ulteriore, importante funzionalità di Git, parte integrante della sua filosofia, è quella di verificare qualsiasi file o directory, prima di archiviarlo, tramite una checksum che è poi utilizzata per riferirvisi. Ciò significa che è impossibile cambiarne il contenuto senza che Git ne sia a conoscenza, il che permette di rilevare qualsiasi perdita o corruzione di dati in transito. 
 Il meccanismo impiegato per generare tale checksum è la funzione crittografica SHA-1, il cui output, basato sul contenuto di un file o sulla struttura interna di una cartella, è un numero esadecimale di 40 caratteri.
-%\image[init_tree.png][width=9.5cm]{La struttura del repository \code{demo}, appena creato con il comando \code{git init}.}
 \section{Il database di Git} % chapter: Git internals -> Git objects
 La componente fondamentale di Git è un \textbf{database chiave-valore}: all'inserimento di un oggetto in un repository, Git restituirà una chiave, tramite la quale esso sarà univocamente identificato. 
 Si può osservare in prima persona questo comportamento di Git utilizzando uno dei suoi comandi più a basso livello, \code{git hash-object}, che salva i dati che gli sono passati come input nell'\textit{object database}, ossia nella cartella \code{.git/objects}, e ne restituisce la checksum.
@@ -103,7 +102,7 @@ Inizializziamo dunque un nuovo repository, \code{demo}:
 		\State \code{Initialized empty Git repository in /home/harisont/demo/.git/}	
 	\end{algorithmic}
 \end{algorithm*}
-\\All'interno della cartella \code{.git} repository appena creato si trova per l'appunto la cartella dell'object database, contenente due sottocartelle, ma - come ci si aspetterebbe - ancora nessun file:
+\\All'interno della cartella \code{.git} repository appena creato si trova, per l'appunto, la cartella dell'object database, contenente due sottocartelle, ma ancora nessun file\footnote{Il comando \code{find .git/objects -type f} serve a cercare tutti i file presenti nel repository.}:
 \begin{algorithm*}
 	\begin{algorithmic}
 		\State \code{\$ cd demo}
@@ -115,7 +114,7 @@ Inizializziamo dunque un nuovo repository, \code{demo}:
 		\State \code{ \ }
 	\end{algorithmic}
 \end{algorithm*}
-\\Creiamo dunque un nuovo file ed inseriamolo nell'object database (senza l'opzione \code{-w}, otterremmo la checksum senza scrivere nulla nel database):
+\bigskip \\Creiamo dunque un nuovo file vuoto ed inseriamolo nell'object database (senza l'opzione \code{-w}, ne otterremmo la checksum senza scrivere nulla nel database):
 \begin{algorithm*}
 	\begin{algorithmic}
 		\State \code{\$ touch first}
@@ -123,13 +122,15 @@ Inizializziamo dunque un nuovo repository, \code{demo}:
 		\State \code{e69de29bb2d1d6434b8b29ae775ad8c2e48c5391}	
 	\end{algorithmic}
 \end{algorithm*}
-\\Ora la ricerca di file in \code{.git/objects} avrà un risultato di questo tipo:
+\bigskip \\
+Chiaramente, a questo punto, la ricerca di file in \code{.git/objects} avrà un risultato di questo tipo:
 \begin{algorithm*}
 	\begin{algorithmic}
 		\State \code{\$ find .git/objects -type f}
 		\State \code{.git/objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391}	
 	\end{algorithmic}
 \end{algorithm*}
+\bigskip \\
 Sono state create una sottocartella, il cui nome è costituito dai primi 2 caratteri della checksum, ed un file, ridenominato con i restanti 38.
 A questo punto, abbiamo tutti gli strumenti per utilizzare, sia pure in modo molto semplice, il nostro sistema di controllo versione: facendo una modifica al file \code{first} e salvandola tramite \code{git hash-object}, si fa in modo che l'object database contenga entrambe le versioni del file, che resteranno disponibili anche qualora il file venisse rimosso dal \textit{working tree}:
 \begin{algorithm*}
@@ -145,8 +146,8 @@ A questo punto, abbiamo tutti gli strumenti per utilizzare, sia pure in modo mol
 \subsection{Tipi di oggetti in Git}
 Chiaramente, i \textbf{blob} non sono i soli oggetti presenti in Git.
 Per permettere di salvare i nomi dei file e di raggrupparli, Git utilizza anche oggetti di tipo \textit{\textbf{tree}}. 
-Per meglio comprendere il ruolo che giocano questi due tipi di oggetti, basti pensare all'analogia tra Git ed un filesystem Unix: da una parte, i blob corrispondono, grosso modo, agli \textit{inodes}\footnote{in Unix, sono così chiamate le strutture dati che descrivono un oggetto del filesystem, ossia un file o una directory, memorizzandone i metadati e la posizione sul disco \cite{winode}.}, i tree corrispondono alle directory. 
-Un oggetto di tipo contiene un puntatore SHA-1 ad un blob o ad un sottoalbero.
+Per meglio comprendere il ruolo che giocano questi due tipi di oggetti, basti pensare all'analogia tra Git ed un filesystem Unix: da una parte, i blob corrispondono, grosso modo, agli \textit{inodes}\footnote{in Unix, sono così chiamate le strutture dati che descrivono un oggetto del filesystem, ossia un file o una directory, memorizzandone i metadati e la posizione sul disco \cite{winode}.}, dall'altra i tree corrispondono alle directory. 
+Un oggetto di tipo tree contiene un puntatore SHA-1 ad un blob o ad un sottoalbero.
 \begin{figure}[h]
 	\centering
 	\begin{minipage}{7cm}
@@ -158,13 +159,60 @@ Un oggetto di tipo contiene un puntatore SHA-1 ad un blob o ad un sottoalbero.
 	\end{minipage}
 	\caption{Corrispondenza tra oggetti di tipo tree e cartelle in un repository Git: sulla sinistra, il modello concettuale, sulla destra l'output del comando \code{tree}.}
 \end{figure}
+\bigskip \\
+Poiché gli oggetti di tipo tree sono creati a partire dallo stato della staging area, cioè a partire dal file \code{index}, la creazione manuale di un oggetto di tale tipo richiede la creazione di un indice \textit{ad hoc}, per la quale si può utilizzare un altro comando a basso livello, \code{git update-index}, volto appunto ad aggiungere un file alla staging area, o il più noto \code{git add}, che aggiorna il file \code{index} con il contenuto del working tree \cite{git_ref}. Supponiamo di aver aggiunto alla staging area il file \code{README}: a questo punto, è possibile creare un oggetto tree, che sarà memorizzato nell'object database, tramite il comando \code{git write-tree}, che ne restituisce la checksum:
+\begin{algorithm*}
+	\begin{algorithmic}
+		\State \code{\$ git write-tree}
+		\State \code{543b9bebdc6bd5c4b22136034a95dd097a57d3dd}	
+	\end{algorithmic}
+\end{algorithm*}
+\ \\Per verificare il tipo di un oggetto, si può fare uso del comando \code{git cat-file}, con l'opzione \code{-t}, mentre l'opzione \code{-p} serve a visualizzare il suo contenuto:
+\begin{algorithm*}
+	\begin{algorithmic}
+		\State \code{\$ git cat-file -t 543b9bebdc6bd5c4b22136034a95dd097a57d3dd}
+		\State \code{tree}
+		\State \code{\$ git cat-file -p 543b9bebdc6bd5c4b22136034a95dd097a57d3dd}
+		\State \code{100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 README}
+	\end{algorithmic}
+\end{algorithm*}
+\ \\ 
+Gli oggetti di tipo tree costituiscono, in pratica, la forma più semplice delle \quote{istantanee} di cui si è parlato nell'introduzione. Tuttavia, non risolvono tutti i problemi pratici del controllo versione: innanzitutto, con il solo uso di tree e blob, per recuperare le informazioni relative alle versioni precedenti di un progetto è necessario utilizzare le checksum, il che è poco agevole. Inoltre sarebbe utile salvare altre informazioni relative alle suddette \quote{istantanee}, come il loro autore, la data ed una descrizione. E' a questo proposito che sono stati introdotti gli oggetti di tipo \textit{\textbf{commit}}.
+La creazione di un oggetto di questo tipo avviene tramite il comando \code{git commit-tree}, che è in pratica il corrispettivo a basso livello del più usato \code{git commit}: data la checksum di un tree, prendendo il messaggio di commit dallo standard input, restituisce l'id dell'oggetto creato:
+\begin{algorithm*}
+	\begin{algorithmic}
+		\State \code{\$ echo 'first commit' | git commit-tree 543b9bebdc6bd5c4b22136034a95d\\ \ \ d097a57d3dd}
+		\State \code{d03724c8f46342c5057107adc1c586feba5793ff}
+	\end{algorithmic}
+\end{algorithm*}
+\ \\ 
+La struttura di un commit è la seguente:
+\begin{algorithm*}
+	\begin{algorithmic}
+		\State \code{\$ git cat-file -p d03724c8f46342c5057107adc1c586feba5793ff}
+		\State \code{tree 543b9bebdc6bd5c4b22136034a95dd097a57d3dd}
+		\State \code{author Arianna Masciolini <uzkamascio@gmail.com> 1531326893 +0200}
+		\State \code{committer Arianna Masciolini <uzkamascio@gmail.com> 1531326893 +0200}
+		\State 
+		\State \code{first commit}
+	\end{algorithmic}
+\end{algorithm*}
+\ \\ 
+\subsection{Memorizzazione degli oggetti}
+...
+\subsection{Riferimenti}
+...
 \newpage
 \begin{thebibliography}{9}
 	\bibitem{git_pro}
 	Scott Chacon, Ben Straub. \textit{Git Pro}, seconda edizione, 2014.
+	\bibitem{git_ref}
+	\href{https://git-scm.com/docs}{Git reference manual}. \\Ultima visita: 11/07/2018.
 	\bibitem{openhub}
-	\url{openhub.net}. Ultima visita: 5/7/2018.
+	\url{openhub.net}. \\Ultima visita: 5/7/2018.
 	\bibitem{winode}
-	\textit{inode}. Wikipedia. \url{https://en.wikipedia.org/wiki/Inode}. Ultima visita: 10/7/2018.
+	Wikipedia. \href{https://en.wikipedia.org/wiki/Inode}{\textit{inode}}. \\Ultima visita: 10/7/2018.
+	\bibitem{fun}
+	Junio C. Hamano. \href{https://gitster.livejournal.com/39629.html}{\textit{Fun with updating the cached contents in the index by staging}}. \\Ultima visita: 11/07/2018.
 \end{thebibliography}
 \end{document}
