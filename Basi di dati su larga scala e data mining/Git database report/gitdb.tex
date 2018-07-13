@@ -35,18 +35,18 @@
 \tableofcontents
 \newpage
 \section{Introduzione}
-Git è un rinomato sistema di controllo versione distribuito che si appoggia ad un database non relazionale. L'importanza di tale database è tale da rendere una sua descrizione al giusto livello di approfondimento sufficiente per comprendere, con buona approssimazione, il funzionamento a basso livello di tale programma, spesso poco chiaro anche a chi lo utilizza quotidianamente. 
-L'obiettivo di questo lavoro è appunto quello di aiutare l'utente di Git ad ottenerne un buon modello concettuale, utile per un uso più consapevole, e di spiegare quali vantaggi offra l'approccio adottato da Git nell'ambito della memorizzazione dei dati rispetto alle soluzioni adottate da gran parte dei sistemi concorrenti. 
+Git è un rinomato sistema di controllo versione distribuito che si appoggia ad un database non relazionale. L'importanza di tale database è tale da rendere una sua descrizione al giusto livello di approfondimento sufficiente per comprendere, con buona approssimazione, il funzionamento a basso livello di tale programma, che rimane spesso poco chiaro anche a chi lo utilizza quotidianamente. 
+Gli obiettivi di questo lavoro sono dunque quello di aiutare l'utente di Git ad ottenerne un buon modello concettuale, volto ad un uso più consapevole, e quello di spiegare quali vantaggi offra l'approccio adottato da Git nell'ambito della memorizzazione dei dati rispetto alle soluzioni preferite da gran parte dei sistemi concorrenti. 
 \bigskip \\
-Per raggiungere questo obiettivo, dopo alcuni cenni alla storia dei sistemi di controllo versione, i concetti fondamentali di Git verranno richiamati con una terminologia che dovrebbe risultare familiare ai suoi utenti, mentre la \hyperref[quarta sezione]{quarta sezione}, la più ampia, è dedicata specificamente al sottostante database, del quale mostra la struttura anche mediante alcuni esempi pratici, facendo uso di comandi poco noti, ma utili dal punto di vista didattico e sempre confrontati con i loro corrispettivi ad alto livello.
+Per raggiungere questo obiettivo, dopo alcuni cenni alla storia dei sistemi di controllo versione, i concetti fondamentali di Git verranno richiamati con una terminologia che dovrebbe risultare familiare ai suoi utenti, mentre la \hyperref[quarta sezione]{quarta sezione}, la più ampia, è dedicata specificamente al sottostante database, esplorato anche anche mediante alcuni esempi pratici ove si fa uso di comandi poco noti, ma utili dal punto di vista didattico e sempre confrontati con i loro corrispettivi ad alto livello.
 \section{Breve storia dei VCS}
-Un \textit{Version Control System} (VCS) è un sistema che tiene traccia delle modifiche apportate ad uno o più file in modo da garantire all'utente la possibilità di accedere alle versioni precedenti dei file suddetti in qualsiasi momento. 
+Un \textit{Version Control System} (VCS) è un sistema che tiene traccia delle modifiche apportate ad uno o più file, in modo da garantire all'utente la possibilità di ripristinarne in qualsiasi momento le versioni precedenti. 
 \bigskip \\
-I primi sistemi di controllo di versione, locali, nacquero con l'idea di risolvere i problemi legati a quello che potrebbe essere definito versioning \quote{manuale}, consistente nel conservare più copie dei file d'interesse: la forte suscettibilità a errori e lo spreco di spazio su disco. Tra questi VCS locali, RCS ha goduto ha lungo di grande popolarità: esso salva su disco, in un particolare formato, una serie di \textit{patch}, ossia le differenze tra una versione e l'altra dei file, in modo tale da poter ricostruire lo stato in cui era ognuno di essi in qualsiasi momento, applicandovi una dopo l'altra le varie patch.
+I primi sistemi di controllo di versione, locali, nacquero con l'idea di risolvere i problemi legati a quello che potrebbe essere definito versioning \quote{manuale}, consistente nel conservare più copie dei file d'interesse: la forte suscettibilità a errori e lo spreco di spazio su disco. Tra questi VCS locali, RCS ha goduto ha lungo di grande popolarità. In RCS vengono salvate su disco, in un particolare formato, una serie di \textit{patch}, ossia le differenze tra una versione e l'altra dei file, in modo tale da poter ricostruire lo stato in cui era ognuno di essi in un dato momento, applicandovi una dopo l'altra le varie patch.
 \bigskip \\
-Successivamente, ci si pose il problema di permettere a più persone di collaborare a distanza. Per risolverlo nacquero i sistemi centralizzati di controllo di versione (CVCS), come CVS, Subversion, e Perforce. In questi sistemi, per il resto analoghi ad RCS e simili, tutte le versioni dei file controllati sono salvate su un unico server e rese così disponibili ai diversi utenti. Anche questo approccio presenta però problematiche importanti, dovute al fatto che il server centrale rappresenta un punto di vulnerabilità per l'intero sistema. 
+Successivamente, ci si pose il problema di permettere a più persone di collaborare a distanza. Per risolverlo, nacquero i sistemi di controllo di versione centralizzati (CVCS), come CVS, Subversion, e Perforce. In questi sistemi, per il resto analoghi ad RCS e simili, tutte le versioni dei file controllati sono salvate su un unico server e rese così disponibili ai diversi utenti. Anche questo approccio presenta però problematiche importanti, dovute al fatto che il server centrale rappresenta un punto di vulnerabilità per l'intero sistema. 
 \bigskip \\
-I DVCS (\textit{Distributed VCS}), di cui Git, Mercurial, Bazaar e Darcs sono gli esempi più noti, risolvono questo problema: i membri del gruppo non si limitano a scaricare la più recente versione dei file, ma copiano l'intero repository, cosicchè ogni client costituisce un backup completo del progetto.
+I DVCS (\textit{Distributed VCS}), di cui Git, Mercurial, Bazaar e Darcs sono gli esempi più noti, risolvono questo problema: i membri del gruppo non si limitano a scaricare la più recente versione dei file, ma copiano l'intero repository, cosicché ogni client costituisce un backup completo del progetto.
 \begin{figure}[h]
 	\centering
 		\begin{minipage}{4cm}
@@ -63,11 +63,11 @@ I DVCS (\textit{Distributed VCS}), di cui Git, Mercurial, Bazaar e Darcs sono gl
 		\end{minipage}
 	\caption{Confronto tra un VCS locale, un CVCS e un DVCS.}
 \end{figure}
-\\In particolare, Git -ad oggi il VCS più diffuso \cite{openhub}- si differenzia tanto dagli altri sistemi distribuiti quanto dai loro predecessori per il modo in cui memorizza i dati: non come una serie di \textit{patch} legate ai vari file, ma come una serie di \quote{istantanee} di un filesystem in miniatura, accessibili tramite puntatori.
+\\In particolare, Git - ad oggi il VCS più diffuso \cite{openhub} - si differenzia tanto dagli altri sistemi distribuiti quanto dai loro predecessori per il modo in cui memorizza i dati: non come una serie di \textit{patch} legate ai vari file, ma come una serie di \quote{istantanee} di un filesystem in miniatura, accessibili tramite puntatori.
 \section{Nozioni di base su Git}
 Git, nato nel 2005 per favorire lo sviluppo del kernel Linux, è un sistema di controllo versione completamente distribuito che deve il suo successo al proprio modello di branching, che lo rende ottimale per la gestione di progetti open source, che hanno quasi sempre uno sviluppo non lineare.
 \bigskip \\
-Come si è accennato nella sezione precedente, Git adotta un approccio radicalmente differente rispetto a quello tradizionale, il cosiddetto controllo versione \textit{delta-based}, basato su una lista di \textit{patch}, ossia di modifiche, legate ai singoli file. Un repository Git è infatti una sorta di filesystem Unix-like semplificato, di cui viene fatta una sorta di \quote{istantanea} resa accessibile mediante un puntatore ogniqualvolta lo stato del progetto viene salvato.
+Come si è accennato nella sezione precedente, Git adotta un approccio radicalmente differente rispetto a quello tradizionale, il cosiddetto controllo versione \textit{delta-based}, basato su una lista di \textit{patch} legate ai singoli file: un repository Git è infatti una sorta di filesystem Unix-like semplificato di cui viene conservata una sorta di \quote{istantanea}, resa accessibile mediante un puntatore, ogniqualvolta lo stato del progetto viene salvato.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=13cm]{delta-based.png}
@@ -79,13 +79,13 @@ Come si è accennato nella sezione precedente, Git adotta un approccio radicalme
 \bigskip \\
 Quasi tutte le azioni possibili in Git consistono, in ultima analisi, nell' \textit{aggiungere} dati al sottostante database. Cancellare dei dati e, in generale, compiere azioni distruttive, è reso volutamente difficile, in modo tale da rendere pressoché impossibile perdere il proprio lavoro, se non altro a seguito di un \textit{commit}, l'azione tramite la quale i cambiamenti al repository vengono salvati.
 \bigskip \\
-Per meglio comprendere quale sia il significato di un commit in Git e, in generale, per ottenere un buon modello concettuale del funzionamento di tale sistema di controllo versione, è fondamentale conoscere gli stati in cui può trovarsi un file all'interno di un repository:
+Per meglio comprendere quale sia il significato di un commit in Git e, in generale, per capire come funzioni tale sistema di controllo versione, è fondamentale conoscere gli stati in cui può trovarsi un file all'interno di un repository:
 \begin{itemize}
 	\item \textit{modified}: sono state effettuate delle modifiche al file, non ancora confermate tramite un commit;
 	\item \textit{staged}: il file, che ha subito delle modifiche, è stato marcato come parte del prossimo commit;
-	\item \textit{committed}: il file è salvato permanentemente nel database locale tramite, appunto, un commit.
+	\item \textit{committed}: il file è stato salvato permanentemente nel database locale tramite, appunto, un commit.
 \end{itemize}
-A questo punto è opportuno parlare della struttura di un repository Git, le cui parti principali sono:
+E' inoltre opportuno parlare della struttura di un repository Git, le cui parti principali sono:
 \begin{itemize}
 	\item il \textit{working tree}, consistente in una copia di una specifica versione del progetto, estratta dal database in modo da poter essere modificata dall'utente;
 	\item la cartella \code{.git}, dove vengono si trovano i metadati e l'\textit{object database}, sui cui ci soffermerà nella prossima sezione, relativi al progetto;
@@ -133,9 +133,9 @@ Chiaramente, a questo punto, la ricerca di file in \code{.git/objects} avrà un 
 		\State \code{.git/objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391}	
 	\end{algorithmic}
 \end{algorithm*}
-\bigskip \\
+\ \\
 Sono state create una sottocartella, il cui nome è costituito dai primi 2 caratteri della checksum, ed un file, ridenominato con i restanti 38.
-A questo punto, abbiamo tutti gli strumenti per utilizzare, sia pure in modo molto semplice, il nostro sistema di controllo versione: facendo una modifica al file \code{first} e salvandola tramite \code{git hash-object}, si fa in modo che l'object database contenga entrambe le versioni del file, che resteranno disponibili anche qualora il file venisse rimosso dal \textit{working tree}:
+Abbiamo già tutti gli strumenti per utilizzare, sia pure in modo molto semplice, il nostro sistema di controllo versione: facendo una modifica al file \code{first} e salvandola tramite \code{git hash-object}, si fa in modo che l'object database contenga entrambe le versioni del file, che resteranno disponibili anche qualora il file venisse rimosso dal \textit{working tree}:
 \begin{algorithm*}
 	\begin{algorithmic}
 		\State \code{\$ echo \minquote{first modification!} > first}
@@ -162,15 +162,17 @@ Un oggetto di tipo tree contiene un puntatore SHA-1 ad un blob o ad un sottoalbe
 	\end{minipage}
 	\caption{Corrispondenza tra oggetti di tipo tree e cartelle in un repository Git: sulla sinistra, il modello concettuale, sulla destra l'output del comando \code{tree}.}
 \end{figure}
+\ \\
+Poiché gli oggetti di tipo tree sono creati a partire dallo stato della staging area, cioè a partire dal file \code{index}, la creazione manuale di un oggetto di tale tipo richiede la creazione di un indice \textit{ad hoc}, per la quale si può utilizzare un altro comando a basso livello, \code{git update-index}, volto appunto ad aggiungere un file alla staging area, o il più noto \code{git add}, che aggiorna il file \code{index} con il contenuto del working tree \cite{git_ref}.
 \bigskip \\
-Poiché gli oggetti di tipo tree sono creati a partire dallo stato della staging area, cioè a partire dal file \code{index}, la creazione manuale di un oggetto di tale tipo richiede la creazione di un indice \textit{ad hoc}, per la quale si può utilizzare un altro comando a basso livello, \code{git update-index}, volto appunto ad aggiungere un file alla staging area, o il più noto \code{git add}, che aggiorna il file \code{index} con il contenuto del working tree \cite{git_ref}. Supponiamo di aver aggiunto alla staging area il file \code{README}: a questo punto, è possibile creare un oggetto tree, che sarà memorizzato nell'object database, tramite il comando \code{git write-tree}, che ne restituisce la checksum:
+Supponiamo di aver aggiunto alla staging area il file \code{README}: a questo punto, è possibile creare un oggetto tree, che sarà memorizzato nell'object database, tramite il comando \code{git write-tree}, che ne restituisce la checksum:
 \begin{algorithm*}
 	\begin{algorithmic}
 		\State \code{\$ git write-tree}
 		\State \code{543b9bebdc6bd5c4b22136034a95dd097a57d3dd}	
 	\end{algorithmic}
 \end{algorithm*}
-\ \\Per verificare il tipo di un oggetto, si può fare uso del comando \code{git cat-file}, con l'opzione \code{-t}, mentre l'opzione \code{-p} serve a visualizzare il suo contenuto:
+\ \\Per verificare il tipo di un oggetto, si può fare uso del comando \code{git cat-file}, con l'opzione \code{-t}, mentre l'opzione \code{-p} serve a visualizzare il suo contenuto in una forma appropriata:
 \begin{algorithm*}
 	\begin{algorithmic}
 		\State \code{\$ git cat-file -t 543b9bebdc6bd5c4b22136034a95dd097a57d3dd}
@@ -181,8 +183,8 @@ Poiché gli oggetti di tipo tree sono creati a partire dallo stato della staging
 \end{algorithm*}
 \ \\ 
 Gli oggetti di tipo tree costituiscono, in pratica, la forma più semplice delle \quote{istantanee} di cui si è parlato nell'introduzione. Tuttavia, non risolvono tutti i problemi pratici del controllo versione: innanzitutto, con il solo uso di tree e blob, per recuperare le informazioni relative alle versioni precedenti di un progetto è necessario utilizzare le checksum, il che è poco agevole. Inoltre sarebbe utile salvare altre informazioni relative alle suddette \quote{istantanee}, come il loro autore, la data ed una descrizione. E' a questo proposito che sono stati introdotti gli oggetti di tipo \textit{\textbf{commit}}.
-La creazione di un oggetto di questo tipo avviene tramite il comando \code{git commit-tree} - il corrispettivo a basso livello del più noto \code{git commit} - data la checksum di un tree, prendendo il messaggio di commit dallo standard input, restituisce l'id dell'oggetto creato:
-\begin{algorithm*}
+La creazione di un oggetto di questo tipo avviene tramite il comando \code{git commit-tree} - il corrispettivo a basso livello del più noto \code{git commit} - che, data la checksum di un tree, prendendo il messaggio di commit dallo standard input, restituisce l'id dell'oggetto creato:
+\begin{algorithm*}[H]
 	\begin{algorithmic}
 		\State \code{\$ echo 'first commit' | git commit-tree 543b9bebdc6bd5c4b22136034a95d\\ \ \ d097a57d3dd}
 		\State \code{d03724c8f46342c5057107adc1c586feba5793ff}
@@ -192,7 +194,6 @@ La creazione di un oggetto di questo tipo avviene tramite il comando \code{git c
 La struttura di un commit è la seguente:
 \begin{algorithm*}
 	\begin{algorithmic}
-		\State \code{\$ git cat-file -p d03724c8f46342c5057107adc1c586feba5793ff}
 		\State \code{tree 543b9bebdc6bd5c4b22136034a95dd097a57d3dd}
 		\State \code{author Arianna Masciolini <uzkamascio@gmail.com> 1531326893 +0200}
 		\State \code{committer Arianna Masciolini <uzkamascio@gmail.com> 1531326893 +0200}
@@ -201,7 +202,7 @@ La struttura di un commit è la seguente:
 	\end{algorithmic}
 \end{algorithm*}
 \subsection{Memorizzazione degli oggetti}
-In Git, ad ogni oggetto è associato un header che ne contiene il tipo, seguito da un spazio, dalla sua dimensione in byte e, per finire, da un byte nullo. La checksum dell'oggetto viene calcolata a partire dalla concatenazione dell'header con il contenuto stesso ed è in base a tale checksum, come accennato in precedenza, che viene stabilito il percorso in cui sarà salvato nell'object database: i primi due caratteri determinano la sottocartella, i restanti il nome del file.
+In Git, ad ogni oggetto è associato un header che ne contiene il tipo, seguito da un0 spazio, dalla sua dimensione in byte e, per finire, da un byte nullo. La checksum dell'oggetto viene calcolata a partire dalla concatenazione dell'header con il contenuto stesso ed è in base a tale checksum, come accennato in precedenza, che viene stabilito il percorso in cui sarà salvato nell'object database: i primi due caratteri determinano la sottocartella, i restanti il nome del file.
 \subsection{Riferimenti}
 Il comando \code{git log}, data la checksum di un oggetto di tipo commit, permette di visualizzare lo storico dei commit di un repository a partire da quello specificato. Ad esempio, \code{git log d03724c8f46342c5057107adc1c586feba5793ff} restituisce:
 \begin{algorithm*}
@@ -214,7 +215,7 @@ Il comando \code{git log}, data la checksum di un oggetto di tipo commit, permet
 	\end{algorithmic}
 \end{algorithm*}
 \ \\
-Anche in questo caso, l'uso della checksum risulta scomodo: è per questo che in Git sono presenti i riferimenti (\textit{refs}), una sorta di alias delle checksum SHA-1, salvate nella cartella \code{.git/refs}, che non contiene file, ma è strutturata come segue:
+Anche in questo caso, l'uso della checksum risulta scomodo: è per questo che in Git sono presenti i riferimenti (\textit{refs}), una sorta di alias delle checksum SHA-1, salvate nella cartella \code{.git/refs}, che non contiene file ma solo cartelle ed è strutturata come segue:
 \begin{algorithm*}
 	\begin{algorithmic}
 		\State \code{\$ find .git/refs}
@@ -235,8 +236,8 @@ Anche in questo caso, l'uso della checksum risulta scomodo: è per questo che in
 		\State \code{first commit}
 	\end{algorithmic}
 \end{algorithm*}
-\ \\Se si vuole aggiornare un riferimento così creato, è consigliato non manipolarlo a mano, ma utilizzare il comando \code{git update-ref}\footnote{anche questo è un comando a basso livello, che raramente viene eseguito direttamente. Più spesso, si utilizza \code{git branch <branch>}, che tramite il comando \code{update-ref aggiunge la checksum dell'ultimo commit al ramo corrente.}}. 
-E' così, in pratica, che funziona il branching di Git: un branch è infatti niente altro che un puntatore alla \code{HEAD}, un riferimento simbolico al ramo corrente, di una certa linea di sviluppo. 
+\ \\Se si vuole aggiornare un riferimento così creato, è consigliato non manipolarlo a mano, ma utilizzare il comando \code{git update-ref}\footnote{anche questo è un comando a basso livello, che raramente viene eseguito direttamente. Più spesso, si utilizza \code{git branch <branch>}, che tramite il comando \code{update-ref} aggiunge la checksum dell'ultimo commit al ramo corrente.}. 
+E' così, in pratica, che funziona il branching di Git: un branch non è altro, infatti, che un puntatore alla \code{HEAD} di una linea di sviluppo, cioè al riferimento simbolico al ramo corrente. 
 \newpage
 \begin{thebibliography}{9}
 	\bibitem{git_pro}
